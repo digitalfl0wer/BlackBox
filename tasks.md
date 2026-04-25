@@ -1,10 +1,10 @@
-# Black Box — Agentic Task List
+# Black Boxx — Agentic Task List
 **Hackathon Build | Solo | Deadline: Sat April 25, 10:00 AM PT**
 
 Work top to bottom. Do not skip ahead. Each task has a clear done condition.
 Check off each task as you complete it. Estimated total: ~18–20 focused hours.
 
-Global Rules to follow (apply before coding):
+Global Rules to followr (apply before coding):
 1. Review the current codebase first:
 - Read PRD.md and tasks.md.
 - Inspect existing files in your scope and identify what is already done vs missing.
@@ -95,7 +95,7 @@ Global Rules to follow (apply before coding):
 ---
 
 ### T-01 · Define global design tokens
-- [x] Extend `tailwind.config.js` with Black Box color palette:
+- [x] Extend `tailwind.config.js` with Black Boxx color palette:
   - Deep black: `#0A0A0A`
   - Off-white: `#F5F0EB`
   - Warm amber: `#C8933A`
@@ -198,7 +198,7 @@ File: `src/App.jsx`
 ### T-20 · Welcome screen
 File: `src/screens/Welcome.jsx`
 
-- [x] Render app name: **Black Box**
+- [x] Render app name: **Black Boxx**
 - [x] Render tagline: *"Preserve the truth. Understand the pattern. Reach support."*
 - [x] Render 2-sentence mission statement
 - [x] Render disclaimer: "This app is for personal safety documentation and education. It does not provide legal advice."
@@ -228,7 +228,7 @@ File: `src/screens/KinfolkSetup.jsx`
 File: `src/screens/Home.jsx`
 
 - [x] Read and display Kinfolk name from localStorage: *"Your Kinfolk: [name]"*
-- [x] Render large buttons: **Start Black Box Session** (primary/amber), **Private Timeline**, **Kinfolk**, **Support Options**
+- [x] Render large buttons: **Start Black Boxx Session** (primary/amber), **Private Timeline**, **Kinfolk**, **Support Options**
 - [x] All buttons route correctly
 - [x] If `isRecording` is true: show pulsing dot + **Return to Session** button
 - [x] Buttons are minimum 48px tap target
@@ -310,30 +310,16 @@ File: `src/screens/ReflectionView.jsx`
   also try loading from localStorage before redirecting.
 - [x] Section 1: Plain-Language Summary — paragraph
 - [x] Section 2: Timeline — ordered list of `{ time, event }` items
-- [ ] Section 2 timeline items must always show a visible timestamp/sequence label (never blank)
 - [x] Section 3: Possible Concern Areas — badge chips per category
 - [x] Section 4: Why These Were Flagged — per area: reason + cited phrase(s)
 - [ ] Section 5: What This Does Not Mean — `<Guardrail variant="reflection" />`
 - [x] Section 6: Suggested Next Steps — bulleted list
 - [ ] Section 7: Support Options — `<ResourceCard />` per org
-- [ ] Section 8 content renders first at the top of ReflectionView (above Section 1)
-- [ ] Section 8 has no visible heading/title text in UI (do not label it "Affirming Message")
+- [ ] Section 8: Affirming Message — `<AffirmingMessage />` component, rendered prominently at bottom
 - [ ] Guardrail block visible without scrolling past content
 - [ ] All 8 sections render with real API data
 
 **Done when:** All 8 sections render with live pipeline data. Guardrail visible. Direct navigation to `/reflection` with no data redirects to `/home` cleanly.
-
----
-
-### T-26A · Reflection ordering + timeline timestamp hotfix
-Files: `src/screens/ReflectionView.jsx`, `src/components/AffirmingMessage.jsx`
-
-- [ ] Move Section 8 content block to the top of ReflectionView and remove section title/header text
-- [ ] Keep Section 8 styling prominent but neutral (no heading, no icon)
-- [ ] If a timeline item has no `time`, render a deterministic fallback label (e.g. `Step 1`, `Step 2`)
-- [ ] Confirm no timeline row renders with an empty time field in UI
-
-**Done when:** Reflection opens with the support line at top (untitled) and timeline never displays blank time labels.
 
 ---
 
@@ -387,7 +373,7 @@ File: `src/components/SignalButton.jsx`
 
 - [x] On tap: pull Kinfolk + session data from context
 - [x] Generate alert message:
-  > "[Name] may need you. They started a Black Box Session at [time]. Please check on them. Last known location: [location or 'not shared']."
+  > "[Name] may need you. They started a Black Boxx Session at [time]. Please check on them. Last known location: [location or 'not shared']."
 - [x] Show full-screen preview modal with the generated message
 - [x] Confirm button → sets `signalSent: true` in context, shows success toast, closes modal
 - [x] Cancel button → closes modal, no state change
@@ -527,26 +513,12 @@ File: `src/agents/reflectionAgent.js`
 - [x] Build prompt from all inputs: notes, tags, flagged phrases, resource names
 - [x] Call `gpt-4o` with `response_format: { type: 'json_object' }`
 - [x] System prompt (use verbatim from PRD §5):
-  > "You are an AI safety reflection assistant inside Black Box. Your role is to help users organize what happened, notice possible concern areas, and connect to support. You are not a lawyer, therapist, emergency responder, investigator, or judge. Do not determine whether a crime occurred. Do not give legal advice. Do not diagnose abuse, trauma, manipulation, or mental health conditions. Do not pressure the user to report. Do not tell the user to confront the other person. Do not claim certainty. Use plain language. Use trauma-aware, culturally respectful wording. Prioritize user safety, dignity, and control."
+  > "You are an AI safety reflection assistant inside Black Boxx. Your role is to help users organize what happened, notice possible concern areas, and connect to support. You are not a lawyer, therapist, emergency responder, investigator, or judge. Do not determine whether a crime occurred. Do not give legal advice. Do not diagnose abuse, trauma, manipulation, or mental health conditions. Do not pressure the user to report. Do not tell the user to confront the other person. Do not claim certainty. Use plain language. Use trauma-aware, culturally respectful wording. Prioritize user safety, dignity, and control."
 - [x] Return schema enforced in prompt: all 8 sections of `AIReflection`
 - [x] Parse and validate JSON response before returning
 - [x] Throw descriptive error if response is missing required sections
-- [ ] Add strict completeness checks so partial reflections are rejected (empty/placeholder core sections fail validation)
-- [ ] Add one retry attempt with tighter instructions if first model output is incomplete
-- [ ] Ensure timeline entries always include `time`; backfill sequence labels in agent output if missing
 
 **Done when:** Agent returns valid, parseable JSON with all 8 sections populated for a test session.
-
----
-
-### T-44A · Reflection completeness diagnostics (OpenAI output)
-Files: `src/agents/reflectionAgent.js`, `api/reflect.js`
-
-- [ ] Log structured diagnostics when reflection output fails schema/completeness checks (missing field names + stage)
-- [ ] Add a deterministic fallback path when reflection is incomplete after retry (no partial payloads returned to UI)
-- [ ] Add a manual test case in dev notes: sparse notes vs detailed notes both return complete reflection objects
-
-**Done when:** Incomplete OpenAI reflections are either repaired by retry or replaced by full fallback JSON, never partial UI data.
 
 ---
 
@@ -688,7 +660,7 @@ File: `src/agents/orchestrator.js`
 ### T-53 · README
 File: `README.md`
 
-- [ ] What Black Box is (2–3 sentences)
+- [ ] What Black Boxx is (2–3 sentences)
 - [ ] The problem it solves
 - [ ] Agent architecture overview: OrchestratorAgent → KeywordAgent → ResourceAgent → ReflectionAgent
 - [ ] API layer explanation: `api/reflect.js` is a Vercel serverless function — OpenAI key server-side only
@@ -811,7 +783,7 @@ Platform: YouTube (unlisted) or Loom | Target: 6–7 minutes | Hard limit: 10 mi
 ---
 
 ### T-62 · LinkedIn announcement post
-- [ ] Write post: describe Black Box, who it's for, why you built it
+- [ ] Write post: describe Black Boxx, who it's for, why you built it
 - [ ] Tag all four required accounts:
   - [ ] NSBE SFBA
   - [ ] Algorythm
@@ -844,7 +816,7 @@ Go slowly. You cannot edit after confirming.
 - [ ] **About You:** full legal name, email, affiliated org, role, LinkedIn URL
 - [ ] **Team:** solo — your info only
 - [ ] **Project:**
-  - [ ] Name: `Black Box`
+  - [ ] Name: `Black Boxx`
   - [ ] Track: `AI for Coding`
   - [ ] Description (30+ chars): 2–3 sentences — problem, solution, agent architecture. Include "Black communities" and "AI Reflection."
   - [ ] Tech used: React, Vite, Tailwind CSS, OpenAI API (GPT-4o + GPT-4o-mini), Vercel Serverless Functions, Browser MediaRecorder API, localStorage

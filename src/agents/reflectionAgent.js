@@ -1,4 +1,4 @@
-const SYSTEM_PROMPT = `You are an AI safety reflection assistant inside Black Box. Your role is to help users organize what happened, notice possible concern areas, and connect to support. You are not a lawyer, therapist, emergency responder, investigator, or judge. Do not determine whether a crime occurred. Do not give legal advice. Do not diagnose abuse, trauma, manipulation, or mental health conditions. Do not pressure the user to report. Do not tell the user to confront the other person. Do not claim certainty. Use plain language. Use trauma-aware, culturally respectful wording. Prioritize user safety, dignity, and control.
+const SYSTEM_PROMPT = `You are an AI safety reflection assistant inside Black Boxx. Your role is to help users organize what happened, notice possible concern areas, and connect to support. You are not a lawyer, therapist, emergency responder, investigator, or judge. Do not determine whether a crime occurred. Do not give legal advice. Do not diagnose abuse, trauma, manipulation, or mental health conditions. Do not pressure the user to report. Do not tell the user to confront the other person. Do not claim certainty. Use plain language. Use trauma-aware, culturally respectful wording. Prioritize user safety, dignity, and control.
 
 Return ONLY valid JSON with exactly these 8 fields:
 
@@ -32,6 +32,7 @@ const REQUIRED_FIELDS = [
 
 export async function runReflectionAgent({ sessionPayload, keywordAnalysis, resources }, openai) {
   const notes = sessionPayload?.notes || ''
+  const transcript = sessionPayload?.transcript || ''
   const tags = sessionPayload?.scenarioTags || []
   const startedAt = sessionPayload?.startedAt || ''
   const endedAt = sessionPayload?.endedAt || ''
@@ -47,6 +48,17 @@ export async function runReflectionAgent({ sessionPayload, keywordAnalysis, reso
   const durationMin = Math.round(durationSeconds / 60)
   const durationLabel = durationMin > 0 ? `${durationMin} minute${durationMin !== 1 ? 's' : ''}` : 'less than a minute'
 
+  const contentParts = []
+  if (transcript) {
+    contentParts.push(`Audio transcript (verbatim from recording):\n${transcript}`)
+  }
+  if (notes) {
+    contentParts.push(`User notes (typed after session):\n${notes}`)
+  }
+  if (!transcript && !notes) {
+    contentParts.push('(no transcript or notes provided)')
+  }
+
   const userMessage = [
     `Session metadata:`,
     `- State: ${state || 'not specified'}`,
@@ -56,13 +68,12 @@ export async function runReflectionAgent({ sessionPayload, keywordAnalysis, reso
     `- Signal sent to Kinfolk: ${signalSent ? 'Yes' : 'No'}`,
     `- Scenario tags selected by user: ${tags.length ? tags.join(', ') : 'None'}`,
     '',
-    `User notes:`,
-    notes || '(no notes provided)',
+    ...contentParts,
     '',
     `Possible concern areas identified:`,
     categories.length ? categories.join(', ') : 'None detected',
     '',
-    `Flagged phrases from notes:`,
+    `Flagged phrases:`,
     flaggedPhrases.length
       ? flaggedPhrases.map((p) => `"${p.phrase}" — ${p.category} (${p.urgency})`).join('\n')
       : 'None',
@@ -75,8 +86,9 @@ export async function runReflectionAgent({ sessionPayload, keywordAnalysis, reso
       : 'None matched',
     '',
     'Generate the AI Reflection JSON with all 8 fields.',
+    'Prioritize the audio transcript as the primary source when building the summary and timeline — it is verbatim.',
     'Use the matched support resources above for the supportOptions field — copy them exactly.',
-    'If notes are sparse, keep the reflection brief and honest rather than filling space with assumptions.',
+    'If content is sparse, keep the reflection brief and honest rather than filling space with assumptions.',
   ].join('\n')
 
   const response = await openai.chat.completions.create({

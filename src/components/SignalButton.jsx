@@ -20,7 +20,7 @@ function formatSignalMessage({
     : new Date().toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' })
   const resolvedLocation = locationLabel || 'not shared'
 
-  return `${resolvedName} may need you. They started a Black Box Session at ${resolvedTime}. Please check on them. Last known location: ${resolvedLocation}.`
+  return `${resolvedName} may need you. They started a Black Boxx Session at ${resolvedTime}. Please check on them. Last known location: ${resolvedLocation}.`
 }
 
 function joinClasses(...classNames) {
@@ -32,10 +32,19 @@ export default function SignalButton({
   kinfolk: kinfolkProp,
   disabled = false,
   className = '',
+  externalOpen = false,
+  onExternalClose,
 }) {
   const { startedAt, currentSession, sendSignal, signalSent } = useSession()
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [showToast, setShowToast] = useState(false)
+
+  const modalVisible = externalOpen || isModalOpen
+
+  function closeModal() {
+    setIsModalOpen(false)
+    onExternalClose?.()
+  }
 
   const kinfolk = useMemo(() => kinfolkProp || readKinfolk(), [kinfolkProp])
   const startedAtValue = startedAt || currentSession?.startedAt || null

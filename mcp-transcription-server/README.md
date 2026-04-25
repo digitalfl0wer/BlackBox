@@ -1,4 +1,4 @@
-# Black Box Audio MCP Server
+# Black Boxx Audio MCP Server
 
 Local Node.js MCP server for audio transcription.
 

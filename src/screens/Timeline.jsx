@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import PrivateTimeline from './PrivateTimeline'
 
 function readSessions() {
   try {
@@ -10,37 +11,28 @@ function readSessions() {
   }
 }
 
-function formatSessionDate(isoDate) {
-  if (!isoDate) {
-    return 'No date'
-  }
-
-  return new Date(isoDate).toLocaleString([], {
-    month: 'short',
-    day: 'numeric',
-    year: 'numeric',
-    hour: 'numeric',
-    minute: '2-digit',
-  })
+function formatDuration(totalSeconds) {
+  const safe = Number.isFinite(totalSeconds) ? Math.max(0, totalSeconds) : 0
+  const minutes = String(Math.floor(safe / 60)).padStart(2, '0')
+  const seconds = String(safe % 60).padStart(2, '0')
+  return `${minutes}:${seconds}`
 }
 
-export default function Timeline() {
+function normalizeSession(session) {
+  return {
+    ...session,
+    tags: session.tags || session.scenarioTags || [],
+    duration: session.duration || formatDuration(session.durationSeconds),
+  }
+}
+
+export default function TimelineRoute() {
   const navigate = useNavigate()
   const [sessions, setSessions] = useState([])
 
   useEffect(() => {
-    setSessions(readSessions())
+    setSessions(readSessions().map(normalizeSession))
   }, [])
-
-  function openReflection(session) {
-    window.localStorage.setItem('blackbox_current_session', JSON.stringify(session))
-
-    if (session.reflection) {
-      window.localStorage.setItem('blackbox_reflection', JSON.stringify(session.reflection))
-    }
-
-    navigate('/reflection')
-  }
 
   function handleBack() {
     if (window.history.length > 1) {
@@ -51,54 +43,13 @@ export default function Timeline() {
     navigate('/home', { replace: true })
   }
 
-  return (
-    <main className="bb-page">
-      <section className="bb-shell bb-panel max-w-3xl">
-        <button
-          type="button"
-          onClick={handleBack}
-          className="bb-back mb-4"
-        >
-          Back
-        </button>
-        <p className="bb-label">PRIVATE TIMELINE</p>
-        <h1 className="bb-title mt-2 text-2xl sm:text-3xl">Private Timeline</h1>
+  function openSession(session) {
+    window.localStorage.setItem('blackbox_current_session', JSON.stringify(session))
+    if (session.reflection) {
+      window.localStorage.setItem('blackbox_reflection', JSON.stringify(session.reflection))
+    }
+    navigate('/reflection')
+  }
 
-        {sessions.length === 0 ? (
-          <p className="mt-4 rounded-control border border-divider-gray bg-void-black/45 p-4 text-sm text-neutral-gray">
-            No sessions saved yet.
-          </p>
-        ) : (
-          <ul className="mt-5 space-y-3">
-            {sessions.map((session, index) => (
-              <li key={`${session.id || session.sessionId || index}-${index}`}>
-                <button
-                  type="button"
-                  onClick={() => openReflection(session)}
-                  className="w-full rounded-card border border-divider-gray/80 bg-void-black/45 p-4 text-left transition hover:border-memory-violet/55 hover:shadow-violet-glow"
-                >
-                  <p className="text-base font-semibold text-silver-white">
-                    {session.title || `Session ${sessions.length - index}`}
-                  </p>
-                  <p className="mt-1 text-sm text-mist-gray">
-                    {formatSessionDate(session.savedAt || session.endedAt || session.startedAt)}
-                  </p>
-                  <div className="mt-3 flex flex-wrap gap-2">
-                    {(Array.isArray(session.scenarioTags) ? session.scenarioTags : []).map((tag) => (
-                      <span key={`${session.id || index}-${tag}`} className="bb-chip">
-                        {tag}
-                      </span>
-                    ))}
-                  </div>
-                  <p className="mt-3 text-sm text-mist-gray">
-                    Signal sent: <span className="text-silver-white">{session.signalSent ? 'Yes' : 'No'}</span>
-                  </p>
-                </button>
-              </li>
-            ))}
-          </ul>
-        )}
-      </section>
-    </main>
-  )
+  return <PrivateTimeline sessions={sessions} onBack={handleBack} onOpenSession={openSession} />
 }

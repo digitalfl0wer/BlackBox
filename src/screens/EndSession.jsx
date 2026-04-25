@@ -1,95 +1,156 @@
-import { useMemo, useState } from 'react'
+import { useState } from 'react'
 import { Navigate, useNavigate } from 'react-router-dom'
 import { useSession } from '../context/SessionContext'
 
-const COMPONENT_MODULES = import.meta.glob('../components/*.jsx', { eager: true })
+export function EndSession({
+  session,
+  onBack,
+  onSave,
+  scenarios = [
+    'Police Encounter',
+    'Workplace Concern',
+    'Relationship Safety',
+    'Boundary / Consent Concern',
+    'Public Harassment',
+    'Stalking / Unwanted Contact',
+    'Digital Safety',
+    'Exploitation / Restricted Movement',
+    'Medical Concern',
+    'Other',
+  ],
+}) {
+  const [title, setTitle] = useState('')
+  const [selectedTags, setSelectedTags] = useState([])
+  const [notes, setNotes] = useState('')
 
-const SCENARIO_TAGS = [
-  'Police Encounter',
-  'Workplace Concern',
-  'Relationship Safety',
-  'Boundary / Consent Concern',
-  'Public Harassment',
-  'Stalking / Unwanted Contact',
-  'Digital Safety',
-  'Exploitation / Restricted Movement',
-  'Medical Concern',
-  'Other',
-]
-
-function getOptionalComponent(name) {
-  const entry = Object.entries(COMPONENT_MODULES).find(([path]) => path.endsWith(`/${name}.jsx`))
-  return entry?.[1]?.default || null
-}
-
-function formatDateTime(isoValue) {
-  if (!isoValue) {
-    return 'Not available'
+  const toggleTag = (tag) => {
+    setSelectedTags((current) =>
+      current.includes(tag) ? current.filter((entry) => entry !== tag) : [...current, tag]
+    )
   }
 
-  return new Date(isoValue).toLocaleString([], {
+  function handleSave() {
+    if (!title.trim()) return
+    onSave?.({ title: title.trim(), tags: selectedTags, notes: notes.trim() })
+  }
+
+  const startedAt = session?.startedAt ? new Date(session.startedAt) : new Date()
+  const startStamp = `${startedAt.toLocaleDateString('en-US', {
     month: 'short',
     day: 'numeric',
-    hour: 'numeric',
-    minute: '2-digit',
-  })
+  })}, ${startedAt.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' })}`
+
+  return (
+    <main className="bbx-page">
+      <div className="pointer-events-none fixed bottom-[8%] left-[-10%] h-[260px] w-[260px] bg-[radial-gradient(circle,rgba(245,166,35,0.08)_0%,transparent_70%)]" />
+
+      <section className="bbx-shell max-w-4xl">
+        <div className="bbx-card p-4 sm:p-6 lg:p-8">
+          <header className="flex items-center justify-between gap-3">
+            <button type="button" className="bbx-back" onClick={onBack}>← Back</button>
+            <p className="text-[10px] font-medium tracking-[0.2em] text-[#555570]">SESSION WRAP-UP</p>
+          </header>
+
+          <h1 className="bbx-font-display mt-5 text-3xl font-extrabold sm:text-4xl">Wrap Up Your Session</h1>
+
+          <div className="mt-5 grid gap-3 rounded-2xl border border-white/10 bg-[#0f0f1a] p-4 text-center sm:grid-cols-[1fr_auto_1fr_auto_1fr] sm:text-left">
+            <div className="flex flex-col">
+              <span className="text-[10px] font-semibold tracking-[0.15em] text-[#555570]">START TIME</span>
+              <span className="mt-1 text-sm font-semibold text-white">{startStamp}</span>
+            </div>
+            <div className="hidden w-px bg-white/10 sm:block" />
+            <div className="flex flex-col">
+              <span className="text-[10px] font-semibold tracking-[0.15em] text-[#555570]">DURATION</span>
+              <span className="bbx-font-mono mt-1 text-sm font-semibold text-white">{session?.duration || '00:00'}</span>
+            </div>
+            <div className="hidden w-px bg-white/10 sm:block" />
+            <div className="flex flex-col">
+              <span className="text-[10px] font-semibold tracking-[0.15em] text-[#555570]">SIGNAL SENT</span>
+              <span className={`mt-1 text-sm font-semibold ${session?.signalSent ? 'text-[#2ED573]' : 'text-[#9090A8]'}`}>
+                {session?.signalSent ? 'Yes' : 'No'}
+              </span>
+            </div>
+          </div>
+
+          <div className="mt-6 space-y-6">
+            <label className="block">
+              <span className="mb-2 block text-sm font-medium text-[#9090A8]">
+                Session Title <span className="text-[#F5A623]">*</span>
+              </span>
+              <input
+                className="w-full rounded-xl border border-white/10 bg-[#0c0c18] px-4 py-3 text-white outline-none focus:border-[#F5A623]"
+                placeholder="Give this session a name you'll recognize later"
+                value={title}
+                onChange={(event) => setTitle(event.target.value)}
+              />
+            </label>
+
+            <div>
+              <p className="mb-2 text-sm font-medium text-[#9090A8]">What happened? (select all that apply)</p>
+              <div className="flex flex-wrap gap-2">
+                {scenarios.map((tag) => {
+                  const selected = selectedTags.includes(tag)
+                  return (
+                    <button
+                      key={tag}
+                      type="button"
+                      onClick={() => toggleTag(tag)}
+                      className={`rounded-full border px-3 py-2 text-xs font-medium transition ${
+                        selected
+                          ? 'border-[#7B4FFF]/50 bg-[#7B4FFF]/15 text-[#9f86ff]'
+                          : 'border-white/10 bg-[#0f0f1a] text-[#9090A8]'
+                      }`}
+                    >
+                      {tag}
+                    </button>
+                  )
+                })}
+              </div>
+            </div>
+
+            <label className="block">
+              <span className="mb-2 block text-sm font-medium text-[#9090A8]">Notes</span>
+              <textarea
+                className="min-h-[120px] w-full rounded-xl border border-white/10 bg-[#0c0c18] px-4 py-3 text-white outline-none focus:border-[#F5A623]"
+                placeholder="What happened? Write as much detail as you remember. This is for you."
+                value={notes}
+                onChange={(event) => setNotes(event.target.value)}
+              />
+            </label>
+
+            <div className="bbx-disclaimer px-4 py-3 text-xs leading-6">
+              This app is for personal safety documentation and education. It does not provide legal advice.
+              AI can make mistakes - review all summaries before relying on them.
+            </div>
+
+            <button
+              type="button"
+              className="bbx-action bbx-action-amber w-full text-base font-bold disabled:opacity-50"
+              onClick={handleSave}
+              disabled={!title.trim()}
+            >
+              Save &amp; Generate Reflection
+            </button>
+          </div>
+        </div>
+      </section>
+    </main>
+  )
 }
 
 function formatDuration(totalSeconds) {
-  if (!Number.isFinite(totalSeconds)) {
-    return '00:00'
-  }
-
-  const safe = Math.max(0, totalSeconds)
+  const safe = Number.isFinite(totalSeconds) ? Math.max(0, totalSeconds) : 0
   const minutes = String(Math.floor(safe / 60)).padStart(2, '0')
   const seconds = String(safe % 60).padStart(2, '0')
   return `${minutes}:${seconds}`
 }
 
-export default function EndSession() {
+export default function EndSessionRoute() {
   const navigate = useNavigate()
   const { currentSession, saveSession } = useSession()
 
-  const TagPicker = useMemo(() => getOptionalComponent('TagPicker'), [])
-  const Guardrail = useMemo(() => getOptionalComponent('Guardrail'), [])
-
-  const [title, setTitle] = useState('')
-  const [notes, setNotes] = useState('')
-  const [scenarioTags, setScenarioTags] = useState([])
-  const [error, setError] = useState('')
-
   if (!currentSession) {
     return <Navigate to="/home" replace />
-  }
-
-  function handleFallbackTagToggle(tag) {
-    setScenarioTags((previous) =>
-      previous.includes(tag)
-        ? previous.filter((existing) => existing !== tag)
-        : [...previous, tag]
-    )
-  }
-
-  function handleSave(event) {
-    event.preventDefault()
-
-    if (!title.trim()) {
-      setError('Session title is required before saving.')
-      return
-    }
-
-    const payload = {
-      ...currentSession,
-      id: currentSession.sessionId || `${Date.now()}`,
-      title: title.trim(),
-      notes: notes.trim(),
-      scenarioTags,
-      savedAt: new Date().toISOString(),
-    }
-
-    saveSession(payload)
-    setError('')
-    navigate('/reflecting')
   }
 
   function handleBack() {
@@ -97,101 +158,30 @@ export default function EndSession() {
       navigate(-1)
       return
     }
-
     navigate('/home', { replace: true })
   }
 
+  function handleSave({ title, tags, notes }) {
+    const payload = {
+      ...currentSession,
+      id: currentSession.sessionId || `${Date.now()}`,
+      title,
+      notes,
+      scenarioTags: tags,
+      tags,
+      duration: formatDuration(currentSession.durationSeconds),
+      savedAt: new Date().toISOString(),
+    }
+
+    saveSession(payload)
+    navigate('/reflecting')
+  }
+
   return (
-    <main className="bb-page">
-      <section className="bb-shell bb-panel max-w-3xl">
-        <button
-          type="button"
-          onClick={handleBack}
-          className="bb-back mb-4"
-        >
-          Back
-        </button>
-        <p className="bb-label">SESSION WRAP-UP</p>
-        <h1 className="bb-title mt-2 text-2xl sm:text-3xl">End Session</h1>
-
-        <div className="mt-4 grid grid-cols-1 gap-3 rounded-control border border-divider-gray/80 bg-void-black/45 p-4 text-sm text-mist-gray sm:grid-cols-3">
-          <p>
-            <span className="block text-xs uppercase tracking-wide text-neutral-gray">Start Time</span>
-            <span className="text-silver-white">{formatDateTime(currentSession.startedAt)}</span>
-          </p>
-          <p>
-            <span className="block text-xs uppercase tracking-wide text-neutral-gray">Duration</span>
-            <span className="text-silver-white">{formatDuration(currentSession.durationSeconds)}</span>
-          </p>
-          <p>
-            <span className="block text-xs uppercase tracking-wide text-neutral-gray">Signal Sent</span>
-            <span className="text-silver-white">{currentSession.signalSent ? 'Yes' : 'No'}</span>
-          </p>
-        </div>
-
-        <form className="mt-6 space-y-4" onSubmit={handleSave}>
-          <label className="block">
-            <span className="mb-1 block text-sm text-silver-white">Title</span>
-            <input
-              type="text"
-              value={title}
-              onChange={(event) => setTitle(event.target.value)}
-              className="bb-input"
-              required
-            />
-          </label>
-
-          <div className="space-y-2">
-            <span className="block text-sm text-silver-white">Scenario Tags</span>
-            {TagPicker ? (
-              <TagPicker
-                options={SCENARIO_TAGS}
-                selectedTags={scenarioTags}
-                value={scenarioTags}
-                onChange={setScenarioTags}
-              />
-            ) : (
-              <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
-                {SCENARIO_TAGS.map((tag) => (
-                  <label
-                    key={tag}
-                    className="flex min-h-touch items-center gap-2 rounded-control border border-divider-gray bg-void-black/50 px-3 text-sm text-silver-white"
-                  >
-                    <input
-                      type="checkbox"
-                      checked={scenarioTags.includes(tag)}
-                      onChange={() => handleFallbackTagToggle(tag)}
-                      className="h-4 w-4 accent-memory-violet"
-                    />
-                    <span>{tag}</span>
-                  </label>
-                ))}
-              </div>
-            )}
-          </div>
-
-          <label className="block">
-            <span className="mb-1 block text-sm text-silver-white">Notes</span>
-            <textarea
-              value={notes}
-              onChange={(event) => setNotes(event.target.value)}
-              placeholder="Write details you want to remember from this session."
-              className="bb-textarea min-h-32"
-            />
-          </label>
-
-          {Guardrail ? <Guardrail /> : null}
-
-          {error ? <p className="text-sm text-memory-violet">{error}</p> : null}
-
-          <button
-            type="submit"
-            className="bb-btn-primary w-full"
-          >
-            Save &amp; Generate Reflection
-          </button>
-        </form>
-      </section>
-    </main>
+    <EndSession
+      session={{ ...currentSession, duration: formatDuration(currentSession.durationSeconds) }}
+      onBack={handleBack}
+      onSave={handleSave}
+    />
   )
 }
