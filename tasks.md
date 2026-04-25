@@ -310,16 +310,30 @@ File: `src/screens/ReflectionView.jsx`
   also try loading from localStorage before redirecting.
 - [x] Section 1: Plain-Language Summary — paragraph
 - [x] Section 2: Timeline — ordered list of `{ time, event }` items
+- [ ] Section 2 timeline items must always show a visible timestamp/sequence label (never blank)
 - [x] Section 3: Possible Concern Areas — badge chips per category
 - [x] Section 4: Why These Were Flagged — per area: reason + cited phrase(s)
 - [ ] Section 5: What This Does Not Mean — `<Guardrail variant="reflection" />`
 - [x] Section 6: Suggested Next Steps — bulleted list
 - [ ] Section 7: Support Options — `<ResourceCard />` per org
-- [ ] Section 8: Affirming Message — `<AffirmingMessage />` component, rendered prominently at bottom
+- [ ] Section 8 content renders first at the top of ReflectionView (above Section 1)
+- [ ] Section 8 has no visible heading/title text in UI (do not label it "Affirming Message")
 - [ ] Guardrail block visible without scrolling past content
 - [ ] All 8 sections render with real API data
 
 **Done when:** All 8 sections render with live pipeline data. Guardrail visible. Direct navigation to `/reflection` with no data redirects to `/home` cleanly.
+
+---
+
+### T-26A · Reflection ordering + timeline timestamp hotfix
+Files: `src/screens/ReflectionView.jsx`, `src/components/AffirmingMessage.jsx`
+
+- [ ] Move Section 8 content block to the top of ReflectionView and remove section title/header text
+- [ ] Keep Section 8 styling prominent but neutral (no heading, no icon)
+- [ ] If a timeline item has no `time`, render a deterministic fallback label (e.g. `Step 1`, `Step 2`)
+- [ ] Confirm no timeline row renders with an empty time field in UI
+
+**Done when:** Reflection opens with the support line at top (untitled) and timeline never displays blank time labels.
 
 ---
 
@@ -517,8 +531,22 @@ File: `src/agents/reflectionAgent.js`
 - [x] Return schema enforced in prompt: all 8 sections of `AIReflection`
 - [x] Parse and validate JSON response before returning
 - [x] Throw descriptive error if response is missing required sections
+- [ ] Add strict completeness checks so partial reflections are rejected (empty/placeholder core sections fail validation)
+- [ ] Add one retry attempt with tighter instructions if first model output is incomplete
+- [ ] Ensure timeline entries always include `time`; backfill sequence labels in agent output if missing
 
 **Done when:** Agent returns valid, parseable JSON with all 8 sections populated for a test session.
+
+---
+
+### T-44A · Reflection completeness diagnostics (OpenAI output)
+Files: `src/agents/reflectionAgent.js`, `api/reflect.js`
+
+- [ ] Log structured diagnostics when reflection output fails schema/completeness checks (missing field names + stage)
+- [ ] Add a deterministic fallback path when reflection is incomplete after retry (no partial payloads returned to UI)
+- [ ] Add a manual test case in dev notes: sparse notes vs detailed notes both return complete reflection objects
+
+**Done when:** Incomplete OpenAI reflections are either repaired by retry or replaced by full fallback JSON, never partial UI data.
 
 ---
 
@@ -678,6 +706,74 @@ File: `README.md`
 - [ ] Citations: OpenAI, React, Vite, Tailwind, any open-source resources used
 
 **Done when:** A judge can clone the repo and run the app in under 5 minutes using only the README.
+
+---
+
+## PHASE 5.5 — Local MCP Audio Transcription Server (Est. 2–3 hrs)
+
+### T-54 · Scaffold local MCP server package
+Files: `mcp-transcription-server/package.json`, `mcp-transcription-server/index.js`
+
+- [x] Create `mcp-transcription-server/` as a self-contained Node package
+- [x] Add dependencies for MCP server runtime + validation + HTTP transport
+- [ ] Ensure server runs via `node index.js` and `npm run start`
+- [x] Expose configurable host/port via env (`MCP_HOST`, `MCP_PORT`)
+- [x] Expose `/healthz` endpoint for local readiness checks
+
+**Done when:** `node index.js` starts the MCP server locally with no startup errors.
+
+---
+
+### T-55 · Implement transcription tool (`transcribe_audio`)
+Files: `mcp-transcription-server/index.js`
+
+- [x] Register MCP-compatible tool `transcribe_audio`
+- [x] Accept either local `filePath` or `audioBase64` + optional `fileName`
+- [x] Enforce MVP constraints in config and docs: single-speaker, English-only
+- [x] Send audio to transcription backend (`OPENAI_API_KEY` + Whisper/OpenAI model)
+- [x] Return structured result containing transcript ID and output file paths
+- [x] Handle unreadable/missing input files with clear errors
+
+**Done when:** Given a valid local audio file path, tool returns a transcript record and no crash.
+
+---
+
+### T-56 · Persist flat-file transcript records
+Files: `mcp-transcription-server/index.js`, `mcp-transcription-server/.env.example`
+
+- [x] Add configurable output directory (`TRANSCRIPT_OUTPUT_DIR`)
+- [x] Store transcript text as `<id>.txt`
+- [x] Store transcript metadata + text as `<id>.json`
+- [x] Include at minimum: `id`, `createdAt`, `sourceAudioPath`, `language`, `speakerMode`, `transcript`
+- [x] Ensure output directory auto-creates if missing
+
+**Done when:** Each transcription writes both `.json` and `.txt` files to the configured directory.
+
+---
+
+### T-57 · Implement transcript retrieval/history tools
+Files: `mcp-transcription-server/index.js`
+
+- [x] Register MCP-compatible tool `get_transcript`
+- [x] Support retrieval by `filename`
+- [x] Support retrieval by `date` (`YYYY-MM-DD`)
+- [x] Register `list_transcripts` to return recent history with optional date filter
+- [x] Return deterministic JSON output for integration with agent workflows
+
+**Done when:** Past transcripts can be queried reliably by filename or date without manual file inspection.
+
+---
+
+### T-58 · Claude MCP registration + local run docs
+Files: `mcp-transcription-server/README.md`
+
+- [x] Document install + run steps (`npm install`, `node index.js`)
+- [x] Document Claude custom MCP server registration via local URL (`/sse`)
+- [x] Document required env vars and defaults
+- [x] Document tool inputs/outputs with examples
+- [x] Document MVP limits (single-speaker, English-only, file input, flat-file storage)
+
+**Done when:** A teammate can run and connect the server to Claude from docs only.
 
 ---
 
