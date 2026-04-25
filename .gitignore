@@ -1,2 +1,6 @@
 
 .env.local
+node_modules/
+dist/
+.vite/
+.vercel/
