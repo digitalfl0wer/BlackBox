@@ -198,12 +198,12 @@ File: `src/App.jsx`
 ### T-20 · Welcome screen
 File: `src/screens/Welcome.jsx`
 
-- [ ] Render app name: **Black Box**
-- [ ] Render tagline: *"Preserve the truth. Understand the pattern. Reach support."*
-- [ ] Render 2-sentence mission statement
-- [ ] Render disclaimer: "This app is for personal safety documentation and education. It does not provide legal advice."
-- [ ] Render **Get Started** button → navigates to `/setup`
-- [ ] Full-screen layout, centered, dark background, amber CTA
+- [x] Render app name: **Black Box**
+- [x] Render tagline: *"Preserve the truth. Understand the pattern. Reach support."*
+- [x] Render 2-sentence mission statement
+- [x] Render disclaimer: "This app is for personal safety documentation and education. It does not provide legal advice."
+- [x] Render **Get Started** button → navigates to `/setup`
+- [x] Full-screen layout, centered, dark background, amber CTA
 - [ ] Confirm no overflow at 390px mobile viewport
 
 **Done when:** Screen renders correctly on 390px width, button navigates to setup.
@@ -213,12 +213,12 @@ File: `src/screens/Welcome.jsx`
 ### T-21 · Kinfolk Setup screen
 File: `src/screens/KinfolkSetup.jsx`
 
-- [ ] Form fields: your name, your state, Kinfolk name, Kinfolk phone/email, preferred signal message (pre-filled), consent checkbox
-- [ ] Validate all required fields on submit
-- [ ] Checkbox must be checked to enable submit button
-- [ ] Save to `localStorage` as `blackbox_kinfolk` on submit
-- [ ] Navigate to `/home` on success
-- [ ] Confirm data persists after page refresh
+- [x] Form fields: your name, your state, Kinfolk name, Kinfolk phone/email, preferred signal message (pre-filled), consent checkbox
+- [x] Validate all required fields on submit
+- [x] Checkbox must be checked to enable submit button
+- [x] Save to `localStorage` as `blackbox_kinfolk` on submit
+- [x] Navigate to `/home` on success
+- [x] Confirm data persists after page refresh
 
 **Done when:** Form saves to localStorage, checkbox blocks submission, routes to home.
 
@@ -227,11 +227,11 @@ File: `src/screens/KinfolkSetup.jsx`
 ### T-22 · Home screen
 File: `src/screens/Home.jsx`
 
-- [ ] Read and display Kinfolk name from localStorage: *"Your Kinfolk: [name]"*
-- [ ] Render large buttons: **Start Black Box Session** (primary/amber), **Private Timeline**, **Kinfolk**, **Support Options**
-- [ ] All buttons route correctly
-- [ ] If `isRecording` is true: show pulsing dot + **Return to Session** button
-- [ ] Buttons are minimum 48px tap target
+- [x] Read and display Kinfolk name from localStorage: *"Your Kinfolk: [name]"*
+- [x] Render large buttons: **Start Black Box Session** (primary/amber), **Private Timeline**, **Kinfolk**, **Support Options**
+- [x] All buttons route correctly
+- [x] If `isRecording` is true: show pulsing dot + **Return to Session** button
+- [x] Buttons are minimum 48px tap target
 
 **Done when:** All nav buttons route. Recording indicator shows when session active.
 
@@ -240,15 +240,15 @@ File: `src/screens/Home.jsx`
 ### T-23 · Active Session screen
 File: `src/screens/ActiveSession.jsx`
 
-- [ ] On mount: call `startSession()` → triggers `useRecorder.startRecording()`
-- [ ] Display MM:SS timer, updates every second
-- [ ] Show pulsing recording indicator
+- [x] On mount: call `startSession()` → triggers `useRecorder.startRecording()`
+- [x] Display MM:SS timer, updates every second
+- [x] Show pulsing recording indicator
 - [ ] **Send Signal** button → calls `sendSignal()`, triggers `SignalButton` modal
-- [ ] **Discreet** button → calls `enterDiscreet()`
-- [ ] **End Session** button → calls `endSession()`, navigates to `/end`
+- [x] **Discreet** button → calls `enterDiscreet()`
+- [x] **End Session** button → calls `endSession()`, navigates to `/end`
 - [ ] `RecordingAwarenessOverlay` renders 1 second after mount
-- [ ] Discreet overlay renders on top when `isDiscreet === true` — recording does NOT stop
-- [ ] Confirm recording continues across Discreet toggle
+- [x] Discreet overlay renders on top when `isDiscreet === true` — recording does NOT stop
+- [x] Confirm recording continues across Discreet toggle
 
 **Done when:** Timer counts, recording starts on mount, all 3 buttons work, recording survives Discreet.
 
@@ -257,14 +257,14 @@ File: `src/screens/ActiveSession.jsx`
 ### T-24 · End Session + Save screen
 File: `src/screens/EndSession.jsx`
 
-- [ ] Display session metadata: start time, duration, signal sent status
-- [ ] Title field (required)
+- [x] Display session metadata: start time, duration, signal sent status
+- [x] Title field (required)
 - [ ] `<TagPicker />` component (multi-select)
-- [ ] Notes textarea with placeholder copy
-- [ ] **Save & Generate Reflection** button
-- [ ] On save: construct `SessionPayload` from context + form values
-- [ ] Call `saveSession(payload)` then navigate to `/reflecting`
-- [ ] Block save if title is empty
+- [x] Notes textarea with placeholder copy
+- [x] **Save & Generate Reflection** button
+- [x] On save: construct `SessionPayload` from context + form values
+- [x] Call `saveSession(payload)` then navigate to `/reflecting`
+- [x] Block save if title is empty
 
 **Done when:** Form constructs correct payload, saves to localStorage, navigates to loading screen.
 
@@ -273,22 +273,22 @@ File: `src/screens/EndSession.jsx`
 ### T-25 · Reflection Loading screen
 File: `src/screens/ReflectionLoading.jsx`
 
-- [ ] **[FIX — null session crash on direct navigation]** If `currentSession` is null (e.g. direct
+- [x] **[FIX — null session crash on direct navigation]** If `currentSession` is null (e.g. direct
   navigation to `/reflecting` or a page refresh), calling `runAgentPipeline(null)` will throw or
   return a meaningless fallback with no user data. Guard at the top of the component:
   ```javascript
   const { currentSession } = useSession()
   if (!currentSession) return <Navigate to="/home" replace />
   ```
-- [ ] On mount: call `runAgentPipeline(currentSession)` from `orchestrator.js`
-- [ ] Show step progress as each agent completes:
+- [x] On mount: call `runAgentPipeline(currentSession)` from `orchestrator.js`
+- [x] Show step progress as each agent completes:
   - "Analyzing your session..."
   - "Finding relevant support..."
   - "Generating your reflection..."
   - "Almost ready..."
-- [ ] Show copy: "This may take 15–30 seconds."
-- [ ] On pipeline success: call `setReflection(data)`, navigate to `/reflection`
-- [ ] On pipeline failure: show error notice + retry button — never a blank screen
+- [x] Show copy: "This may take 15–30 seconds."
+- [x] On pipeline success: call `setReflection(data)`, navigate to `/reflection`
+- [x] On pipeline failure: show error notice + retry button — never a blank screen
 
 **Done when:** Pipeline fires on mount, progress steps update, routes to reflection on success, error handled gracefully. Direct navigation with no session redirects to `/home`.
 
@@ -297,7 +297,7 @@ File: `src/screens/ReflectionLoading.jsx`
 ### T-26 · Reflection View screen
 File: `src/screens/ReflectionView.jsx`
 
-- [ ] **[FIX — null reflection crash on direct navigation]** If a judge or tester navigates directly
+- [x] **[FIX — null reflection crash on direct navigation]** If a judge or tester navigates directly
   to `/reflection` without a completed pipeline, `reflection` is `null` and every `.map()` and
   property access throws immediately. The `ProtectedRoute` only guards against missing Kinfolk —
   it does not guard against missing reflection data. Add a null guard at the top of the component:
@@ -308,12 +308,12 @@ File: `src/screens/ReflectionView.jsx`
   This also protects against browser refresh on the reflection screen mid-session,
   which clears in-memory state even if localStorage has the data. For production resilience,
   also try loading from localStorage before redirecting.
-- [ ] Section 1: Plain-Language Summary — paragraph
-- [ ] Section 2: Timeline — ordered list of `{ time, event }` items
-- [ ] Section 3: Possible Concern Areas — badge chips per category
-- [ ] Section 4: Why These Were Flagged — per area: reason + cited phrase(s)
+- [x] Section 1: Plain-Language Summary — paragraph
+- [x] Section 2: Timeline — ordered list of `{ time, event }` items
+- [x] Section 3: Possible Concern Areas — badge chips per category
+- [x] Section 4: Why These Were Flagged — per area: reason + cited phrase(s)
 - [ ] Section 5: What This Does Not Mean — `<Guardrail variant="reflection" />`
-- [ ] Section 6: Suggested Next Steps — bulleted list
+- [x] Section 6: Suggested Next Steps — bulleted list
 - [ ] Section 7: Support Options — `<ResourceCard />` per org
 - [ ] Section 8: Affirming Message — `<AffirmingMessage />` component, rendered prominently at bottom
 - [ ] Guardrail block visible without scrolling past content
@@ -326,10 +326,10 @@ File: `src/screens/ReflectionView.jsx`
 ### T-27 · Timeline screen (MVP — minimal)
 File: `src/screens/Timeline.jsx`
 
-- [ ] Read all sessions from `localStorage` key `blackbox_sessions`
-- [ ] Render list: title, date, scenario tags, signal status per session
-- [ ] Tap → navigate to that session's ReflectionView
-- [ ] Empty state: "No sessions saved yet."
+- [x] Read all sessions from `localStorage` key `blackbox_sessions`
+- [x] Render list: title, date, scenario tags, signal status per session
+- [x] Tap → navigate to that session's ReflectionView
+- [x] Empty state: "No sessions saved yet."
 - [ ] At least 1 saved session displays correctly after completing the full flow
 
 **Done when:** Saved session appears and links to its reflection.

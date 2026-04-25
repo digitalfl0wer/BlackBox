@@ -1,3 +1,217 @@
+import { useEffect, useMemo, useState } from 'react'
+import { Navigate, useNavigate } from 'react-router-dom'
+import { useSession } from '../context/SessionContext'
+
+const COMPONENT_MODULES = import.meta.glob('../components/*.jsx', { eager: true })
+
+function getOptionalComponent(name) {
+  const entry = Object.entries(COMPONENT_MODULES).find(([path]) => path.endsWith(`/${name}.jsx`))
+  return entry?.[1]?.default || null
+}
+
+function readStoredReflection() {
+  try {
+    return JSON.parse(window.localStorage.getItem('blackbox_reflection') || 'null')
+  } catch {
+    return null
+  }
+}
+
 export default function ReflectionView() {
-  return null
+  const navigate = useNavigate()
+  const { reflection } = useSession()
+  const [resolvedReflection, setResolvedReflection] = useState(reflection)
+
+  const Guardrail = useMemo(() => getOptionalComponent('Guardrail'), [])
+  const ResourceCard = useMemo(() => getOptionalComponent('ResourceCard'), [])
+  const AffirmingMessage = useMemo(() => getOptionalComponent('AffirmingMessage'), [])
+
+  useEffect(() => {
+    if (reflection) {
+      setResolvedReflection(reflection)
+      return
+    }
+
+    const stored = readStoredReflection()
+    if (stored) {
+      setResolvedReflection(stored)
+    }
+  }, [reflection])
+
+  if (!resolvedReflection) {
+    return <Navigate to="/home" replace />
+  }
+
+  function handleBack() {
+    if (window.history.length > 1) {
+      navigate(-1)
+      return
+    }
+
+    navigate('/home', { replace: true })
+  }
+
+  const timeline = Array.isArray(resolvedReflection.timeline) ? resolvedReflection.timeline : []
+  const concernAreas = Array.isArray(resolvedReflection.concernAreas)
+    ? resolvedReflection.concernAreas
+    : []
+  const whyFlagged = Array.isArray(resolvedReflection.whyFlagged) ? resolvedReflection.whyFlagged : []
+  const nextSteps = Array.isArray(resolvedReflection.nextSteps) ? resolvedReflection.nextSteps : []
+  const supportOptions = Array.isArray(resolvedReflection.supportOptions)
+    ? resolvedReflection.supportOptions
+    : []
+
+  return (
+    <main className="min-h-screen bg-void-black px-4 py-8 text-silver-white sm:px-6">
+      <section className="mx-auto w-full max-w-4xl space-y-4">
+        <header className="rounded-2xl border border-neutral-gray/30 bg-slate-black p-5 sm:p-7">
+          <button
+            type="button"
+            onClick={handleBack}
+            className="h-8 -translate-y-3 self-start rounded-md border border-neutral-gray/40 bg-void-black px-2 py-0.5 text-[10px] font-medium text-silver-white"
+          >
+            Back
+          </button>
+          <p className="text-xs uppercase tracking-[0.2em] text-neutral-gray">AI Reflection</p>
+          <h1 className="mt-2 text-2xl font-semibold sm:text-3xl">Session Reflection</h1>
+        </header>
+
+        <section className="rounded-2xl border border-neutral-gray/30 bg-slate-black p-5 sm:p-7">
+          <h2 className="text-lg font-semibold">1. Plain-Language Summary</h2>
+          <p className="mt-3 leading-7 text-silver-white/90">{resolvedReflection.summary || 'No summary available.'}</p>
+        </section>
+
+        <section className="rounded-2xl border border-neutral-gray/30 bg-slate-black p-5 sm:p-7">
+          <h2 className="text-lg font-semibold">2. Timeline</h2>
+          {timeline.length > 0 ? (
+            <ol className="mt-3 space-y-3 text-sm text-silver-white/90">
+              {timeline.map((item, index) => (
+                <li key={`${item.time || index}-${item.event || index}`} className="rounded-lg border border-neutral-gray/30 bg-void-black/50 p-3">
+                  <p className="text-xs uppercase tracking-wide text-neutral-gray">{item.time || `Step ${index + 1}`}</p>
+                  <p className="mt-1">{item.event || 'No event text provided.'}</p>
+                </li>
+              ))}
+            </ol>
+          ) : (
+            <p className="mt-3 text-sm text-neutral-gray">No timeline points were returned.</p>
+          )}
+        </section>
+
+        <section className="rounded-2xl border border-neutral-gray/30 bg-slate-black p-5 sm:p-7">
+          <h2 className="text-lg font-semibold">3. Possible Concern Areas</h2>
+          {concernAreas.length > 0 ? (
+            <div className="mt-3 flex flex-wrap gap-2">
+              {concernAreas.map((area) => (
+                <span
+                  key={area}
+                  className="rounded-full border border-memory-violet/40 bg-memory-violet/15 px-3 py-1 text-sm text-silver-white"
+                >
+                  {area}
+                </span>
+              ))}
+            </div>
+          ) : (
+            <p className="mt-3 text-sm text-neutral-gray">No concern areas were identified.</p>
+          )}
+        </section>
+
+        <section className="rounded-2xl border border-neutral-gray/30 bg-slate-black p-5 sm:p-7">
+          <h2 className="text-lg font-semibold">4. Why These Were Flagged</h2>
+          {whyFlagged.length > 0 ? (
+            <div className="mt-3 space-y-3">
+              {whyFlagged.map((item, index) => (
+                <article key={`${item.area || index}-${index}`} className="rounded-lg border border-neutral-gray/30 bg-void-black/50 p-4">
+                  <p className="text-sm font-semibold text-silver-white">{item.area || 'Possible concern area'}</p>
+                  <p className="mt-1 text-sm text-silver-white/90">{item.reason || 'No reason provided.'}</p>
+                  {Array.isArray(item.phrases) && item.phrases.length > 0 ? (
+                    <ul className="mt-2 list-disc space-y-1 pl-5 text-sm text-neutral-gray">
+                      {item.phrases.map((phrase, phraseIndex) => (
+                        <li key={`${phrase}-${phraseIndex}`}>{phrase}</li>
+                      ))}
+                    </ul>
+                  ) : null}
+                </article>
+              ))}
+            </div>
+          ) : (
+            <p className="mt-3 text-sm text-neutral-gray">No flagged explanation details were returned.</p>
+          )}
+        </section>
+
+        <section className="rounded-2xl border border-neutral-gray/30 bg-slate-black p-5 sm:p-7">
+          <h2 className="text-lg font-semibold">5. What This Does Not Mean</h2>
+          <div className="mt-3">
+            {Guardrail ? (
+              <Guardrail variant="reflection" />
+            ) : (
+              <p className="rounded-lg border border-neutral-gray/30 bg-void-black/50 p-4 text-sm text-neutral-gray">
+                {resolvedReflection.whatThisDoesNotMean ||
+                  'This reflection is for personal documentation only and may contain errors.'}
+              </p>
+            )}
+          </div>
+        </section>
+
+        <section className="rounded-2xl border border-neutral-gray/30 bg-slate-black p-5 sm:p-7">
+          <h2 className="text-lg font-semibold">6. Suggested Next Steps</h2>
+          {nextSteps.length > 0 ? (
+            <ul className="mt-3 list-disc space-y-2 pl-5 text-sm text-silver-white/90">
+              {nextSteps.map((step, index) => (
+                <li key={`${step}-${index}`}>{step}</li>
+              ))}
+            </ul>
+          ) : (
+            <p className="mt-3 text-sm text-neutral-gray">No next steps were returned.</p>
+          )}
+        </section>
+
+        <section className="rounded-2xl border border-neutral-gray/30 bg-slate-black p-5 sm:p-7">
+          <h2 className="text-lg font-semibold">7. Support Options</h2>
+          {supportOptions.length > 0 ? (
+            <div className="mt-3 grid grid-cols-1 gap-3">
+              {supportOptions.map((resource, index) =>
+                ResourceCard ? (
+                  <ResourceCard key={`${resource.name || index}-${index}`} resource={resource} />
+                ) : (
+                  <article
+                    key={`${resource.name || index}-${index}`}
+                    className="rounded-lg border border-neutral-gray/30 bg-void-black/50 p-4"
+                  >
+                    <p className="text-sm font-semibold text-silver-white">{resource.name}</p>
+                    <p className="mt-1 text-sm text-neutral-gray">{resource.description}</p>
+                    {resource.url ? (
+                      <a
+                        href={resource.url}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="mt-2 inline-block text-sm text-unity-amber"
+                      >
+                        Visit resource
+                      </a>
+                    ) : null}
+                  </article>
+                )
+              )}
+            </div>
+          ) : (
+            <p className="mt-3 text-sm text-neutral-gray">No support options were returned.</p>
+          )}
+        </section>
+
+        <section className="rounded-2xl border border-memory-violet/40 bg-memory-violet/10 p-5 sm:p-7">
+          <h2 className="text-lg font-semibold">8. Affirming Message</h2>
+          <div className="mt-3">
+            {AffirmingMessage ? (
+              <AffirmingMessage message={resolvedReflection.affirmingMessage} />
+            ) : (
+              <p className="text-sm leading-7 text-silver-white/95">
+                {resolvedReflection.affirmingMessage ||
+                  'You took an important step by documenting this session.'}
+              </p>
+            )}
+          </div>
+        </section>
+      </section>
+    </main>
+  )
 }
