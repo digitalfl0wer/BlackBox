@@ -27,13 +27,6 @@ export function SessionReflection({ reflection, session, onBack }) {
       eyebrow: 'MOVING FORWARD',
       content: reflection.nextSteps,
     },
-    { key: 'resources', label: 'Resources', eyebrow: 'SUPPORT', content: reflection.resources },
-    {
-      key: 'affirmation',
-      label: 'A Note for You',
-      eyebrow: 'FROM BLACKBOX',
-      content: reflection.affirmation,
-    },
   ].filter((section) => section.content)
 
   return (
@@ -48,6 +41,13 @@ export function SessionReflection({ reflection, session, onBack }) {
           </header>
 
           <h1 className="bbx-font-display mt-5 text-3xl font-extrabold sm:text-4xl">Session Reflection</h1>
+
+          {reflection.affirmation ? (
+            <div className="mt-5 rounded-2xl border border-[#C8933A]/30 px-5 py-4" style={{ background: 'rgba(200,147,58,0.07)' }}>
+              <p className="text-[10px] font-semibold tracking-[0.2em] text-[#C8933A]">FOR YOU</p>
+              <p className="mt-2 text-[15px] leading-7 text-[#F5F0EB]">{reflection.affirmation}</p>
+            </div>
+          ) : null}
 
           {session?.audioUrl ? (
             <div className="mt-4 rounded-2xl border border-white/10 bg-[#0f0f1a] p-4">
@@ -93,6 +93,47 @@ export function SessionReflection({ reflection, session, onBack }) {
             ))}
           </div>
 
+          {reflection.resources?.length > 0 ? (
+            <div className="mt-6">
+              <p className="text-[10px] font-semibold tracking-[0.2em] text-[#9090A8]">SUPPORT OPTIONS</p>
+              <div className="mt-3 space-y-3">
+                {reflection.resources.map((resource, index) => {
+                  const name = typeof resource === 'string' ? resource : resource.name
+                  const description = typeof resource === 'string' ? '' : resource.description
+                  const url = typeof resource === 'string' ? null : resource.url
+                  const category = typeof resource === 'string' ? '' : resource.category
+                  return (
+                    <div
+                      key={index}
+                      className="rounded-2xl border border-[#7B4FFF]/20 bg-[#0f0f1a] p-4"
+                      style={{ background: 'linear-gradient(135deg, rgba(123,79,255,0.06) 0%, rgba(15,15,26,1) 60%)' }}
+                    >
+                      {category ? (
+                        <span className="inline-block rounded-full border border-[#7B4FFF]/30 bg-[#7B4FFF]/10 px-2 py-0.5 text-[10px] font-medium text-[#a78bfa]">
+                          {category}
+                        </span>
+                      ) : null}
+                      <p className="mt-2 text-sm font-semibold text-white">{name}</p>
+                      {description ? (
+                        <p className="mt-1 text-[13px] leading-6 text-[#9090A8]">{description}</p>
+                      ) : null}
+                      {url ? (
+                        <a
+                          href={url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="mt-3 inline-flex items-center gap-1.5 rounded-xl border border-[#7B4FFF]/40 bg-[#7B4FFF]/15 px-3 py-1.5 text-xs font-semibold text-[#c4b5fd] transition hover:bg-[#7B4FFF]/25"
+                        >
+                          Visit Resource →
+                        </a>
+                      ) : null}
+                    </div>
+                  )
+                })}
+              </div>
+            </div>
+          ) : null}
+
           <div className="bbx-disclaimer mt-6 px-4 py-3 text-xs leading-6">
             AI can make mistakes. Review all summaries, concern areas, and resources before relying on
             them. Possible concern areas are not legal conclusions.
@@ -131,7 +172,7 @@ function ReflectionSection({ section, expanded, onToggle }) {
           {Array.isArray(section.content)
             ? section.content.map((item, index) => (
                 <p key={index} className="mb-1.5 text-[13px] leading-7 text-[#9090A8] last:mb-0">
-                  · {typeof item === 'string' ? item : item.text || JSON.stringify(item)}
+                  · {item}
                 </p>
               ))
             : <p className="text-[13px] leading-7 text-[#9090A8]">{section.content}</p>}
@@ -157,17 +198,30 @@ function readStoredSession() {
   }
 }
 
+function normalizeArray(arr, formatter) {
+  if (!Array.isArray(arr)) return arr
+  return arr.map((item) => (typeof item === 'string' ? item : formatter(item)))
+}
+
 function mapReflectionShape(data) {
   if (!data) return null
 
   return {
     summary: data.summary,
     concerns: data.concerns || data.concernAreas || [],
-    timeline: data.timeline,
-    flaggedReasons: data.flaggedReasons || data.whyFlagged,
+    timeline: normalizeArray(
+      data.timeline,
+      (item) => `${item.time || 'Moment'}: ${item.event || ''}`
+    ),
+    flaggedReasons: normalizeArray(
+      data.flaggedReasons || data.whyFlagged,
+      (item) => `${item.area || item.phrase || ''}: ${item.reason || ''}`
+    ),
     doesNotMean: data.doesNotMean || data.whatThisDoesNotMean,
     nextSteps: data.nextSteps,
-    resources: data.resources || data.supportOptions,
+    resources: Array.isArray(data.resources || data.supportOptions)
+      ? (data.resources || data.supportOptions)
+      : [],
     affirmation: data.affirmation || data.affirmingMessage,
   }
 }

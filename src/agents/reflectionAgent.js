@@ -16,7 +16,7 @@ Return ONLY valid JSON with exactly these 8 fields:
   "supportOptions": [
     { "name": "org name", "category": "category", "description": "1-sentence description", "url": "url" }
   ],
-  "affirmingMessage": "One warm, specific sentence acknowledging what the user did. Do not use generic phrases like 'stay strong'. Speak directly to the courage it takes to document and seek support."
+  "affirmingMessage": "Write 2–3 longer sentences of genuine, specific support for the person who just documented this experience. Ground it in the actual details of what they shared — reference the situation, the tags they chose, or what they did (recording, sending a signal, reaching out). Acknowledge that what they went through was real and hard, and that choosing to document it rather than dismiss it is an act of self-respect and courage. Do not use generic phrases like 'stay strong', 'you've got this', or 'things will get better'. Speak directly to them, in the second person, with warmth and without pressure. Never tell them what to feel or what to do next — only affirm that they matter, that their account is valid, and that support is available when they are ready."
 }`
 
 const REQUIRED_FIELDS = [
@@ -99,7 +99,7 @@ export async function runReflectionAgent({ sessionPayload, keywordAnalysis, reso
       { role: 'user', content: userMessage },
     ],
     temperature: 0.3,
-    max_tokens: 2000,
+    max_tokens: 2500,
   })
 
   const parsed = JSON.parse(response.choices[0].message.content)
