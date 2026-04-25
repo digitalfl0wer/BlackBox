@@ -1,7 +1,7 @@
 {
   "functions": {
     "api/reflect.js": {
-      "runtime": "nodejs20.x"
+      "runtime": "@vercel/node@3.2.26"
     }
   }
 }
