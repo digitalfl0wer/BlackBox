@@ -26,72 +26,73 @@ export default function Home() {
   }
 
   return (
-    <main className="bb-page">
-      <section className="bb-shell max-w-2xl bb-panel">
-        <button
-          type="button"
-          onClick={handleBack}
-          className="bb-back mb-4"
-        >
-          Back
-        </button>
-        <p className="bb-label">BLACK BOX WORKSPACE</p>
-        <h1 className="bb-title mt-2 text-3xl">Home</h1>
-        <p className="mt-2 text-sm text-mist-gray sm:text-base">
-          Your Kinfolk: <span className="text-silver-white">{kinfolk?.kinfolkName || 'Not set yet'}</span>
-        </p>
+    <main className="bbx-page">
+      <section className="bbx-shell max-w-3xl">
+        <div className="bbx-card p-6 sm:p-8">
+          <button type="button" onClick={handleBack} className="bbx-back">
+            ← Back
+          </button>
+          <p className="mt-6 text-xs uppercase tracking-[0.22em] text-[#9090A8]">YOUR TRUTH. PROTECTED.</p>
+          <h1 className="bbx-font-display mt-2 text-4xl">Home</h1>
 
-        {isRecording ? (
-          <div className="mt-4 flex items-center justify-between gap-3 rounded-control border border-memory-violet/45 bg-memory-violet/10 p-3 shadow-violet-glow">
-            <div className="flex items-center gap-2 text-sm text-silver-white">
-              <span className="h-2.5 w-2.5 animate-pulse rounded-full bg-safety-green shadow-[0_0_10px_rgb(92_255_178/0.75)]" />
-              Recording in progress
-            </div>
+          <div className="mt-5 rounded-xl border border-white/10 bg-[#171725] px-4 py-3 text-sm text-[#B3B3C8]">
+            {kinfolk?.kinfolkName ? (
+              <p className="flex items-center gap-2">
+                <span className="h-2.5 w-2.5 rounded-full bg-[#42D392]" />
+                Kinfolk connected: <span className="font-semibold text-white">{kinfolk.kinfolkName}</span>
+              </p>
+            ) : (
+              <p>
+                Kinfolk status: <span className="text-[#F5A623]">Add one</span>{' '}
+                <button type="button" onClick={() => navigate('/kinfolk')} className="underline">
+                  now
+                </button>
+              </p>
+            )}
+          </div>
+
+          <div className="mt-8 flex justify-center">
             <button
               type="button"
               onClick={() => navigate('/session')}
-              className="bb-btn-primary"
+              className={`bbx-font-display h-[190px] w-[190px] rounded-full border text-center text-lg leading-6 sm:h-[220px] sm:w-[220px] ${
+                isRecording
+                  ? 'border-[#FF4C5B]/60 bg-[#2B1720] text-[#FFD9DE]'
+                  : 'border-[#7B4FFF]/45 bg-[radial-gradient(circle_at_30%_25%,rgba(123,79,255,.45),rgba(15,15,28,.9))] text-white'
+              }`}
+              style={{ boxShadow: '0 24px 55px rgba(0,0,0,.42)' }}
             >
-              Return to Session
+              {isRecording ? 'Return to Session' : 'Start Session'}
             </button>
           </div>
-        ) : null}
 
-        <div className="mt-6 grid grid-cols-1 gap-3">
-          <button
-            type="button"
-            onClick={() => navigate('/session')}
-            className="bb-btn-primary justify-start"
-          >
-            Start Black Box Session
-          </button>
+          <div className="mt-8 grid gap-3 sm:grid-cols-2">
+            <button
+              type="button"
+              onClick={() => navigate('/timeline')}
+              className="min-h-[4.5rem] rounded-2xl border border-[#7B4FFF]/50 bg-[#221b3a] px-4 text-left text-white"
+            >
+              <p className="bbx-font-display text-xl">Private Timeline</p>
+            </button>
+            <button
+              type="button"
+              onClick={() => navigate('/kinfolk')}
+              className="min-h-[4.5rem] rounded-2xl border border-[#F5A623]/55 bg-[#2A2010] px-4 text-left text-white"
+            >
+              <p className="bbx-font-display text-xl">Kinfolk</p>
+            </button>
+            <button
+              type="button"
+              onClick={() => navigate('/support')}
+              className="min-h-[4.5rem] rounded-2xl border border-white/14 bg-[#1a1a2a] px-4 text-left text-white sm:col-span-2"
+            >
+              <p className="bbx-font-display text-xl">Support Options</p>
+            </button>
+          </div>
 
-          <button
-            type="button"
-            onClick={() => navigate('/timeline')}
-            className="bb-btn-ghost justify-start"
-          >
-            Private Timeline
-          </button>
-
-          <button
-            type="button"
-            onClick={() => navigate('/setup')}
-            className="bb-btn-ghost justify-start"
-          >
-            Kinfolk
-          </button>
-
-          <button
-            type="button"
-            onClick={() => {
-              const hasReflection = Boolean(window.localStorage.getItem('blackbox_reflection'))
-              navigate(hasReflection ? '/reflection' : '/timeline')
-            }}
-            className="bb-btn-secondary justify-start"
-          >
-            Support Options
-          </button>
+          <p className="mt-7 text-sm text-[#9090A8]">
+            Black Boxx preserves the truth when the world tries to rewrite it.
+          </p>
         </div>
       </section>
     </main>

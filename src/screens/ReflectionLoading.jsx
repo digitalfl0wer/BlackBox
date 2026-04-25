@@ -3,10 +3,10 @@ import { Navigate, useNavigate } from 'react-router-dom'
 import { useSession } from '../context/SessionContext'
 
 const PROGRESS_STEPS = [
+  'Transcribing your recording...',
   'Analyzing your session...',
   'Finding relevant support...',
   'Generating your reflection...',
-  'Almost ready...',
 ]
 
 const AGENT_MODULES = import.meta.glob('../agents/*.js')
@@ -105,7 +105,7 @@ export default function ReflectionLoading() {
           onClick={handleBack}
           className="bb-back mb-4"
         >
-          Back
+          ← Back
         </button>
         <p className="bb-label">AI MEMORY SYNTHESIS</p>
         <h1 className="bb-title mt-2 text-2xl">Preparing Your AI Reflection</h1>
