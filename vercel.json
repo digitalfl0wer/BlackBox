@@ -1,7 +1,1 @@
-{
-  "functions": {
-    "api/reflect.js": {
-      "runtime": "nodejs22.x"
-    }
-  }
-}
+{}
