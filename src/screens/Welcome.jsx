@@ -3,25 +3,9 @@ import { useNavigate } from 'react-router-dom'
 export default function Welcome() {
   const navigate = useNavigate()
 
-  function handleBack() {
-    if (window.history.length > 1) {
-      navigate(-1)
-      return
-    }
-
-    navigate('/', { replace: true })
-  }
-
   return (
     <main className="flex min-h-screen items-center justify-center bg-void-black px-5 py-8 text-silver-white">
       <section className="w-full max-w-xl rounded-2xl border border-neutral-gray/30 bg-slate-black p-6 shadow-xl shadow-void-black/50 sm:p-8">
-        <button
-          type="button"
-          onClick={handleBack}
-          className="h-8 -translate-y-3 self-start rounded-md border border-neutral-gray/40 bg-void-black px-2 py-0.5 text-[10px] font-medium text-silver-white"
-        >
-          Back
-        </button>
         <p className="text-xs uppercase tracking-[0.2em] text-neutral-gray">Black Box</p>
         <h1 className="mt-2 text-4xl font-semibold leading-tight text-silver-white sm:text-5xl">
           Preserve the truth.
