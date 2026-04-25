@@ -1,4 +1,4 @@
-# Black Box
+# Black Boxx
 ### Product Requirements Document — Hackathon Build
 **Event:** Blackathon 2026 | **Track:** AI for Coding | **Deadline:** Sat April 25, 10:00 AM PT
 
@@ -6,7 +6,7 @@
 
 ## 1. North Star
 
-> Black Box helps you preserve the truth, understand the pattern, and reach support — without being left alone after something unsafe happens.
+> Black Boxx helps you preserve the truth, understand the pattern, and reach support — without being left alone after something unsafe happens.
 
 Named after the flight recorder: built to survive pressure, built to tell the truth afterward.
 
@@ -21,13 +21,13 @@ When something unsafe happens — a police encounter, harassment, coercion, a mo
 - Support feels out of reach
 - The person is alone with chaos
 
-For Black communities navigating systems that may not protect them, this is compounded. Black Box closes that gap.
+For Black communities navigating systems that may not protect them, this is compounded. Black Boxx closes that gap.
 
 ---
 
 ## 3. Track Fit — AI for Coding
 
-Black Box uses AI not as decoration, but as the core product experience:
+Black Boxx uses AI not as decoration, but as the core product experience:
 
 - An **OrchestratorAgent** receives session data and routes it to specialized sub-agents
 - A **KeywordAgent** scans transcripts and notes for safety signals using rule-based detection + LLM analysis
@@ -43,7 +43,7 @@ The user never "talks to an AI." The AI organizes what happened and connects the
 
 | Feature | Product Name |
 |---|---|
-| Recording mode | Black Box Session |
+| Recording mode | Black Boxx Session |
 | Trusted contacts | Kinfolk |
 | Alert action | Send Signal |
 | Incident log | Private Timeline |
@@ -274,7 +274,7 @@ Add `OPENAI_API_KEY` in Vercel → Project → Settings → Environment Variable
 - Stored in `localStorage`
 - Consent/awareness acknowledgment required before proceeding
 
-### F2 — Start Black Box Session
+### F2 — Start Black Boxx Session
 - Single tap → recording begins immediately (before overlay)
 - Timer starts, timestamp saved, optional location captured
 - `MediaRecorder` API via custom `useRecorder` hook
@@ -484,7 +484,7 @@ Possible concern areas are not legal conclusions.
 
 1. Open app → Welcome screen
 2. Set up Kinfolk (name + contact)
-3. Tap "Start Black Box Session" → recording begins, overlay appears
+3. Tap "Start Black Boxx Session" → recording begins, overlay appears
 4. Tap "Send Signal" → toast shows simulated alert preview
 5. Tap "Discreet" → Daily Notes screen, recording continues
 6. Triple-tap title → return to session
