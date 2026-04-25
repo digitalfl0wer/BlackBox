@@ -23,8 +23,9 @@ export default function RecordingAwarenessOverlay() {
   }
 
   return (
-    <div className="pointer-events-none absolute inset-0 z-30 flex items-end bg-void-black/50 p-4 sm:items-center sm:justify-center sm:p-6">
-      <aside className="pointer-events-auto w-full max-w-xl rounded-card border border-neutral-gray/50 bg-surface-2 p-4 sm:p-5">
+    <div className="pointer-events-none absolute inset-0 z-30 flex items-end bg-void-black/60 p-4 backdrop-blur-sm sm:items-center sm:justify-center sm:p-6">
+      <aside className="pointer-events-auto w-full max-w-xl rounded-card border border-divider-gray bg-slate-black/90 p-4 shadow-panel-glow backdrop-blur-md sm:p-5">
+        <p className="bb-label">RECORDING NOTICE</p>
         <h2 className="text-base font-semibold text-silver-white">Recording Awareness</h2>
         <div className="mt-3 space-y-2 text-sm leading-6 text-silver-white/90">
           <p>This app is for personal safety documentation and education. It does not provide legal advice.</p>
@@ -38,7 +39,7 @@ export default function RecordingAwarenessOverlay() {
           type="button"
           disabled={secondsRemaining > 0}
           onClick={() => setDismissed(true)}
-          className="mt-4 min-h-touch w-full rounded-control bg-unity-amber px-4 py-3 text-sm font-semibold text-void-black disabled:cursor-not-allowed disabled:bg-unity-amber/55"
+          className="bb-btn-primary mt-4 w-full disabled:cursor-not-allowed disabled:bg-unity-amber/55"
         >
           {secondsRemaining > 0 ? `I Understand (${secondsRemaining}s)` : 'I Understand'}
         </button>

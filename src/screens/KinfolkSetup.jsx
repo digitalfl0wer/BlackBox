@@ -83,20 +83,21 @@ export default function KinfolkSetup() {
   }
 
   return (
-    <main className="min-h-screen bg-void-black px-4 py-8 text-silver-white sm:px-6">
-      <section className="mx-auto w-full max-w-2xl rounded-2xl border border-neutral-gray/30 bg-slate-black p-5 sm:p-7">
+    <main className="bb-page">
+      <section className="bb-shell max-w-2xl bb-panel">
         <button
           type="button"
           onClick={handleBack}
-          className="h-8 -translate-y-3 self-start rounded-md border border-neutral-gray/40 bg-void-black px-2 py-0.5 text-[10px] font-medium text-silver-white"
+          className="bb-back mb-4"
         >
           Back
         </button>
-        <h1 className="text-2xl font-semibold text-silver-white sm:text-3xl">Set Up Your Kinfolk</h1>
-        <p className="mt-2 text-sm text-neutral-gray sm:text-base">
+        <p className="bb-label">KINFOLK PROFILE</p>
+        <h1 className="bb-title mt-2 text-2xl sm:text-3xl">Set Up Your Kinfolk</h1>
+        <p className="mt-2 text-sm text-mist-gray sm:text-base">
           Add the person you trust so your Signal details stay ready before you need them.
         </p>
-        <p className="mt-2 text-sm text-neutral-gray/85">
+        <p className="mt-2 text-sm text-neutral-gray/90">
           You can skip this for now and add Kinfolk later from Home.
         </p>
 
@@ -107,7 +108,7 @@ export default function KinfolkSetup() {
               type="text"
               value={values.yourName}
               onChange={(event) => updateField('yourName', event.target.value)}
-              className="min-h-12 w-full rounded-lg border border-neutral-gray/40 bg-void-black px-3 text-silver-white outline-none focus:border-unity-amber"
+              className="bb-input"
               aria-invalid={fieldErrors.yourName ? 'true' : 'false'}
               required
             />
@@ -119,7 +120,7 @@ export default function KinfolkSetup() {
               type="text"
               value={values.yourState}
               onChange={(event) => updateField('yourState', event.target.value)}
-              className="min-h-12 w-full rounded-lg border border-neutral-gray/40 bg-void-black px-3 text-silver-white outline-none focus:border-unity-amber"
+              className="bb-input"
               aria-invalid={fieldErrors.yourState ? 'true' : 'false'}
               required
             />
@@ -132,7 +133,7 @@ export default function KinfolkSetup() {
               value={values.kinfolkName}
               onChange={(event) => updateField('kinfolkName', event.target.value)}
               placeholder="emergency contact"
-              className="min-h-12 w-full rounded-lg border border-neutral-gray/40 bg-void-black px-3 text-silver-white outline-none focus:border-unity-amber"
+              className="bb-input"
               aria-invalid={fieldErrors.kinfolkName ? 'true' : 'false'}
               required
             />
@@ -145,7 +146,7 @@ export default function KinfolkSetup() {
               value={values.kinfolkContact}
               onChange={(event) => updateField('kinfolkContact', event.target.value)}
               placeholder="emergency contact phone or email"
-              className="min-h-12 w-full rounded-lg border border-neutral-gray/40 bg-void-black px-3 text-silver-white outline-none focus:border-unity-amber"
+              className="bb-input"
               aria-invalid={fieldErrors.kinfolkContact ? 'true' : 'false'}
               required
             />
@@ -156,20 +157,20 @@ export default function KinfolkSetup() {
             <textarea
               value={values.preferredSignalMessage}
               onChange={(event) => updateField('preferredSignalMessage', event.target.value)}
-              className="min-h-24 w-full rounded-lg border border-neutral-gray/40 bg-void-black px-3 py-2 text-silver-white outline-none focus:border-unity-amber"
+              className="bb-textarea"
               aria-invalid={fieldErrors.preferredSignalMessage ? 'true' : 'false'}
               required
             />
           </label>
 
-          <label className="flex items-start gap-3 rounded-lg border border-neutral-gray/30 bg-void-black/40 p-3">
+          <label className="flex items-start gap-3 rounded-control border border-divider-gray/80 bg-void-black/40 p-3">
             <input
               type="checkbox"
               checked={values.consent}
               onChange={(event) => updateField('consent', event.target.checked)}
               className="mt-1 h-4 w-4 accent-unity-amber"
             />
-            <span className="text-sm leading-6 text-neutral-gray">
+            <span className="text-sm leading-6 text-mist-gray">
               I understand this app is for personal documentation and education, and AI output may contain mistakes.
             </span>
           </label>
@@ -179,7 +180,7 @@ export default function KinfolkSetup() {
           <button
             type="submit"
             disabled={!values.consent}
-            className="min-h-12 w-full rounded-lg bg-unity-amber px-4 py-3 text-sm font-semibold text-void-black transition disabled:cursor-not-allowed disabled:opacity-50"
+            className="bb-btn-primary w-full"
           >
             Save Kinfolk
           </button>
@@ -187,7 +188,7 @@ export default function KinfolkSetup() {
           <button
             type="button"
             onClick={handleSkip}
-            className="min-h-12 w-full rounded-lg border border-neutral-gray/35 bg-transparent px-4 py-3 text-sm font-medium text-neutral-gray transition hover:text-silver-white"
+            className="bb-btn-ghost w-full text-neutral-gray hover:text-silver-white"
           >
             Skip for now
           </button>

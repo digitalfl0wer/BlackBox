@@ -91,36 +91,36 @@ export default function ActiveSession() {
   const kinfolk = useMemo(() => readKinfolk(), [])
 
   return (
-    <main className="relative min-h-screen bg-void-black px-4 py-8 text-silver-white sm:px-6">
-      <section className="mx-auto w-full max-w-2xl rounded-2xl border border-neutral-gray/30 bg-slate-black p-5 sm:p-7">
+    <main className="bb-page relative">
+      <section className="bb-shell bb-panel max-w-2xl">
         <button
           type="button"
           onClick={handleBack}
-          className="h-8 -translate-y-3 self-start rounded-md border border-neutral-gray/40 bg-void-black px-2 py-0.5 text-[10px] font-medium text-silver-white"
+          className="bb-back mb-4"
         >
           Back
         </button>
-        <p className="text-xs uppercase tracking-[0.2em] text-neutral-gray">Black Box Session</p>
+        <p className="bb-label">BLACK BOX SESSION</p>
         <div className="mt-4 flex items-center justify-between">
           <div className="flex items-center gap-2 text-sm text-silver-white">
             <span
-              className={`h-2.5 w-2.5 rounded-full ${isRecording ? 'animate-pulse bg-emerald-500' : 'bg-red-500'}`}
+              className={`h-2.5 w-2.5 rounded-full ${isRecording ? 'animate-pulse bg-safety-green shadow-[0_0_10px_rgb(92_255_178/0.8)]' : 'bg-alert-red'}`}
             />
             {isRecording ? 'Recording live' : 'Recording not active'}
           </div>
-          <span className="text-3xl font-semibold tabular-nums text-silver-white">
+          <span className="font-display text-3xl font-semibold tabular-nums text-silver-white">
             {formatDuration(elapsedSeconds)}
           </span>
         </div>
 
         {recorderError ? (
-          <p className="mt-3 rounded-lg border border-memory-violet/40 bg-memory-violet/10 p-3 text-sm text-silver-white">
+          <p className="mt-3 rounded-control border border-memory-violet/45 bg-memory-violet/10 p-3 text-sm text-silver-white">
             {recorderError}
           </p>
         ) : null}
 
         {signalSentAt ? (
-          <p className="mt-3 text-sm text-neutral-gray">
+          <p className="mt-3 text-sm text-mist-gray">
             Signal sent to {kinfolk?.kinfolkName || 'your Kinfolk'} at{' '}
             {new Date(signalSentAt).toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' })}
           </p>
@@ -131,7 +131,7 @@ export default function ActiveSession() {
             <button
               type="button"
               onClick={handleStartSession}
-              className="min-h-12 rounded-lg bg-unity-amber px-4 py-3 text-sm font-semibold text-void-black sm:col-span-3"
+              className="bb-btn-primary sm:col-span-3"
             >
               Start Black Box Session
             </button>
@@ -142,14 +142,14 @@ export default function ActiveSession() {
               onConfirm={handleSendSignal}
               kinfolk={kinfolk}
               disabled={!isRecording}
-              className="min-h-12 rounded-lg bg-unity-amber px-4 py-3 text-sm font-semibold text-void-black disabled:cursor-not-allowed disabled:opacity-50"
+              className="bb-btn-primary disabled:cursor-not-allowed disabled:opacity-50"
             />
           ) : (
             <button
               type="button"
               onClick={handleSendSignal}
               disabled={!isRecording}
-              className="min-h-12 rounded-lg bg-unity-amber px-4 py-3 text-sm font-semibold text-void-black disabled:cursor-not-allowed disabled:opacity-50"
+              className="bb-btn-primary disabled:cursor-not-allowed disabled:opacity-50"
             >
               Send Signal
             </button>
@@ -159,7 +159,7 @@ export default function ActiveSession() {
             type="button"
             onClick={enterDiscreet}
             disabled={!isRecording}
-            className="min-h-12 rounded-lg border border-neutral-gray/40 bg-void-black px-4 py-3 text-sm font-medium text-silver-white disabled:cursor-not-allowed disabled:opacity-50"
+            className="bb-btn-ghost disabled:cursor-not-allowed disabled:opacity-50"
           >
             Discreet
           </button>
@@ -168,7 +168,7 @@ export default function ActiveSession() {
             type="button"
             onClick={handleEndSession}
             disabled={!isRecording}
-            className="min-h-12 rounded-lg border border-memory-violet/50 bg-memory-violet/10 px-4 py-3 text-sm font-medium text-silver-white disabled:cursor-not-allowed disabled:opacity-50"
+            className="bb-btn-secondary disabled:cursor-not-allowed disabled:opacity-50"
           >
             End Session
           </button>
@@ -178,19 +178,19 @@ export default function ActiveSession() {
       {showAwareness && RecordingAwarenessOverlay ? <RecordingAwarenessOverlay /> : null}
 
       {isDiscreet ? (
-        <div className="absolute inset-0 z-40 bg-void-black/95 px-4 py-8">
+        <div className="absolute inset-0 z-40 bg-void-black/95 px-4 py-8 backdrop-blur-md">
           {DiscreetScreen ? (
             <DiscreetScreen />
           ) : (
-            <section className="mx-auto w-full max-w-lg rounded-2xl border border-neutral-gray/30 bg-slate-black p-6 text-silver-white">
+            <section className="bb-panel mx-auto w-full max-w-lg text-silver-white">
               <h2 className="text-xl font-semibold">Daily Notes</h2>
-              <p className="mt-2 text-sm text-neutral-gray">
+              <p className="mt-2 text-sm text-mist-gray">
                 Keep this screen neutral while your Black Box Session continues in the background.
               </p>
               <button
                 type="button"
                 onClick={exitDiscreet}
-                className="mt-6 min-h-12 w-full rounded-lg bg-unity-amber px-4 py-3 text-sm font-semibold text-void-black"
+                className="bb-btn-primary mt-6 w-full"
               >
                 Return to Session
               </button>

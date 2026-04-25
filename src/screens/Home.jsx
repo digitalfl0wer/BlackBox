@@ -26,30 +26,31 @@ export default function Home() {
   }
 
   return (
-    <main className="min-h-screen bg-void-black px-4 py-8 text-silver-white sm:px-6">
-      <section className="mx-auto w-full max-w-2xl rounded-2xl border border-neutral-gray/30 bg-slate-black p-5 sm:p-7">
+    <main className="bb-page">
+      <section className="bb-shell max-w-2xl bb-panel">
         <button
           type="button"
           onClick={handleBack}
-          className="h-8 -translate-y-3 self-start rounded-md border border-neutral-gray/40 bg-void-black px-2 py-0.5 text-[10px] font-medium text-silver-white"
+          className="bb-back mb-4"
         >
           Back
         </button>
-        <h1 className="text-3xl font-semibold">Home</h1>
-        <p className="mt-2 text-sm text-neutral-gray sm:text-base">
+        <p className="bb-label">BLACK BOX WORKSPACE</p>
+        <h1 className="bb-title mt-2 text-3xl">Home</h1>
+        <p className="mt-2 text-sm text-mist-gray sm:text-base">
           Your Kinfolk: <span className="text-silver-white">{kinfolk?.kinfolkName || 'Not set yet'}</span>
         </p>
 
         {isRecording ? (
-          <div className="mt-4 flex items-center justify-between rounded-lg border border-memory-violet/40 bg-memory-violet/10 p-3">
+          <div className="mt-4 flex items-center justify-between gap-3 rounded-control border border-memory-violet/45 bg-memory-violet/10 p-3 shadow-violet-glow">
             <div className="flex items-center gap-2 text-sm text-silver-white">
-              <span className="h-2.5 w-2.5 animate-pulse rounded-full bg-unity-amber" />
+              <span className="h-2.5 w-2.5 animate-pulse rounded-full bg-safety-green shadow-[0_0_10px_rgb(92_255_178/0.75)]" />
               Recording in progress
             </div>
             <button
               type="button"
               onClick={() => navigate('/session')}
-              className="min-h-12 rounded-lg bg-unity-amber px-4 text-sm font-semibold text-void-black"
+              className="bb-btn-primary"
             >
               Return to Session
             </button>
@@ -60,7 +61,7 @@ export default function Home() {
           <button
             type="button"
             onClick={() => navigate('/session')}
-            className="min-h-12 rounded-lg bg-unity-amber px-4 py-3 text-left text-sm font-semibold text-void-black"
+            className="bb-btn-primary justify-start"
           >
             Start Black Box Session
           </button>
@@ -68,7 +69,7 @@ export default function Home() {
           <button
             type="button"
             onClick={() => navigate('/timeline')}
-            className="min-h-12 rounded-lg border border-neutral-gray/40 bg-void-black px-4 py-3 text-left text-sm font-medium text-silver-white"
+            className="bb-btn-ghost justify-start"
           >
             Private Timeline
           </button>
@@ -76,7 +77,7 @@ export default function Home() {
           <button
             type="button"
             onClick={() => navigate('/setup')}
-            className="min-h-12 rounded-lg border border-neutral-gray/40 bg-void-black px-4 py-3 text-left text-sm font-medium text-silver-white"
+            className="bb-btn-ghost justify-start"
           >
             Kinfolk
           </button>
@@ -87,7 +88,7 @@ export default function Home() {
               const hasReflection = Boolean(window.localStorage.getItem('blackbox_reflection'))
               navigate(hasReflection ? '/reflection' : '/timeline')
             }}
-            className="min-h-12 rounded-lg border border-memory-violet/50 bg-memory-violet/10 px-4 py-3 text-left text-sm font-medium text-silver-white"
+            className="bb-btn-secondary justify-start"
           >
             Support Options
           </button>

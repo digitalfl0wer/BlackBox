@@ -29,7 +29,7 @@ export default function DiscreetOverlay({ onExit }) {
   }
 
   return (
-    <section className="mx-auto w-full max-w-lg rounded-card border border-neutral-gray/40 bg-surface-1 p-5 text-silver-white sm:p-6">
+    <section className="bb-panel mx-auto w-full max-w-lg text-silver-white">
       <h2
         role="button"
         tabIndex={0}
@@ -44,7 +44,7 @@ export default function DiscreetOverlay({ onExit }) {
       >
         Daily Notes
       </h2>
-      <p className="mt-1 text-sm text-soft-sage">
+      <p className="mt-1 text-sm text-mist-gray">
         {new Date().toLocaleDateString([], { weekday: 'long', month: 'short', day: 'numeric' })}
       </p>
 
@@ -52,7 +52,7 @@ export default function DiscreetOverlay({ onExit }) {
         {tasks.map((task) => (
           <label
             key={task.id}
-            className="flex min-h-touch items-center gap-3 rounded-control border border-neutral-gray/35 bg-slate-black px-3 py-2 text-sm"
+            className="flex min-h-touch items-center gap-3 rounded-control border border-divider-gray bg-void-black/60 px-3 py-2 text-sm"
           >
             <input
               type="checkbox"
@@ -71,7 +71,7 @@ export default function DiscreetOverlay({ onExit }) {
           value={notes}
           onChange={(event) => setNotes(event.target.value)}
           placeholder="Write reminders for the day."
-          className="mt-2 min-h-32 w-full rounded-control border border-neutral-gray/40 bg-slate-black px-3 py-2 text-silver-white outline-none focus:border-neutral-gray"
+          className="bb-textarea mt-2 min-h-32"
         />
       </label>
     </section>

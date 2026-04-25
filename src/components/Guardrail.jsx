@@ -20,7 +20,7 @@ export default function Guardrail({ variant = 'default' }) {
   const lines = VARIANT_COPY[variant] || VARIANT_COPY.default
 
   return (
-    <aside className="rounded-control border border-neutral-gray/35 border-l-4 border-l-unity-amber bg-surface-1 px-4 py-3 text-sm leading-6 text-silver-white/95">
+    <aside className="rounded-control border border-divider-gray border-l-4 border-l-unity-amber bg-panel-black/80 px-4 py-3 text-sm leading-6 text-silver-white/95 backdrop-blur-sm">
       {lines.map((line) => (
         <p key={line}>{line}</p>
       ))}

@@ -4,30 +4,33 @@ export default {
   theme: {
     extend: {
       colors: {
-        // T-01 core palette
+        // Unity Cube brand palette
         'void-black': '#0A0A0A',
-        'silver-white': '#F5F0EB',
-        'unity-amber': '#C8933A',
-        'neutral-gray': '#6B7B6E',
+        'slate-black': '#14161B',
+        'silver-white': '#E6E6E8',
+        'unity-amber': '#FF9800',
+        'memory-violet': '#7B5CFF',
+        'safety-green': '#5CFFB2',
+        'neutral-gray': '#6B6F76',
+        'panel-black': '#111318',
+        'mist-gray': '#A8ADB6',
+        'divider-gray': '#2A2E36',
         'alert-red': '#C0392B',
-        // Extended natural deep-tone surfaces
-        'slate-black': '#161712',
-        'surface-1': '#12130F',
-        'surface-2': '#1C1F19',
-        'surface-3': '#262A23',
-        'soft-sage': '#88968A',
-        'sand-ink': '#D6C3A6',
-        // Backward-compatible alias for legacy class usage
-        'memory-violet': '#8A6D4A',
+        // Backward-compatible aliases
+        'surface-1': '#111318',
+        'surface-2': '#161922',
+        'surface-3': '#1A1F2A',
+        'soft-sage': '#8D93A0',
+        'sand-ink': '#E8D0A8',
         'bb-black': '#0A0A0A',
-        'bb-offwhite': '#F5F0EB',
-        'bb-amber': '#C8933A',
-        'bb-sage': '#6B7B6E',
+        'bb-offwhite': '#E6E6E8',
+        'bb-amber': '#FF9800',
+        'bb-sage': '#6B6F76',
         'bb-alert': '#C0392B',
       },
       fontFamily: {
-        sans: ['"DM Sans"', 'system-ui', 'sans-serif'],
-        display: ['"DM Sans"', 'system-ui', 'sans-serif'],
+        sans: ['"Space Grotesk"', '"Sora"', 'system-ui', 'sans-serif'],
+        display: ['"Space Grotesk"', '"Sora"', 'system-ui', 'sans-serif'],
       },
       spacing: {
         touch: '3rem',
@@ -36,6 +39,11 @@ export default {
         control: '0.75rem',
         card: '1rem',
         chip: '999px',
+      },
+      boxShadow: {
+        'amber-glow': '0 0 0 1px rgb(255 152 0 / 0.25), 0 10px 30px rgb(255 152 0 / 0.2)',
+        'violet-glow': '0 0 0 1px rgb(123 92 255 / 0.28), 0 10px 30px rgb(123 92 255 / 0.2)',
+        'panel-glow': '0 16px 50px rgb(0 0 0 / 0.45)',
       },
     },
   },

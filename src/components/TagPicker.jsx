@@ -38,10 +38,10 @@ export default function TagPicker({
             key={tag}
             type="button"
             onClick={() => handleToggle(tag)}
-            className={`min-h-touch rounded-chip border px-4 py-2 text-sm transition-colors ${
+            className={`min-h-touch rounded-chip border px-4 py-2 text-sm transition ${
               isSelected
-                ? 'border-unity-amber bg-unity-amber text-void-black'
-                : 'border-neutral-gray/55 bg-slate-black text-silver-white'
+                ? 'border-unity-amber/70 bg-unity-amber/90 text-void-black shadow-amber-glow'
+                : 'border-divider-gray bg-void-black/55 text-silver-white hover:border-memory-violet/55'
             }`}
             aria-pressed={isSelected}
           >

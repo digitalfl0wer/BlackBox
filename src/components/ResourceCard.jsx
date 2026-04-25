@@ -1,14 +1,14 @@
 const CATEGORY_STYLES = {
-  'Police Encounter': 'border-neutral-gray/50 bg-surface-3 text-soft-sage',
-  'Workplace Concern': 'border-neutral-gray/50 bg-surface-3 text-soft-sage',
-  'Relationship Safety': 'border-unity-amber/45 bg-unity-amber/20 text-sand-ink',
-  'Boundary / Consent Concern': 'border-unity-amber/45 bg-unity-amber/20 text-sand-ink',
-  'Public Harassment': 'border-neutral-gray/50 bg-surface-3 text-soft-sage',
+  'Police Encounter': 'border-memory-violet/45 bg-memory-violet/12 text-silver-white',
+  'Workplace Concern': 'border-memory-violet/45 bg-memory-violet/12 text-silver-white',
+  'Relationship Safety': 'border-unity-amber/50 bg-unity-amber/16 text-silver-white',
+  'Boundary / Consent Concern': 'border-unity-amber/50 bg-unity-amber/16 text-silver-white',
+  'Public Harassment': 'border-memory-violet/45 bg-memory-violet/12 text-silver-white',
   'Stalking / Unwanted Contact': 'border-alert-red/35 bg-alert-red/12 text-silver-white',
-  'Digital Safety': 'border-neutral-gray/50 bg-surface-3 text-soft-sage',
+  'Digital Safety': 'border-memory-violet/45 bg-memory-violet/12 text-silver-white',
   'Exploitation / Restricted Movement': 'border-alert-red/35 bg-alert-red/12 text-silver-white',
-  'Medical Concern': 'border-alert-red/35 bg-alert-red/12 text-silver-white',
-  Other: 'border-neutral-gray/50 bg-surface-3 text-soft-sage',
+  'Medical Concern': 'border-safety-green/45 bg-safety-green/10 text-silver-white',
+  Other: 'border-divider-gray bg-void-black/45 text-silver-white',
 }
 
 function resolveResource({
@@ -35,7 +35,7 @@ export default function ResourceCard(props) {
   const styleClass = CATEGORY_STYLES[resource.category] || CATEGORY_STYLES.Other
 
   return (
-    <article className="rounded-card border border-neutral-gray/35 bg-surface-1 p-4 sm:p-5">
+    <article className="rounded-card border border-divider-gray bg-panel-black/85 p-4 shadow-panel-glow backdrop-blur-sm sm:p-5">
       <div className="flex flex-wrap items-start justify-between gap-2">
         <p className="text-base font-semibold text-silver-white">{resource.name || 'Support Resource'}</p>
         <span className={`rounded-chip border px-3 py-1 text-xs font-medium ${styleClass}`}>
@@ -52,7 +52,7 @@ export default function ResourceCard(props) {
           href={resource.url}
           target="_blank"
           rel="noreferrer"
-          className="mt-4 inline-flex min-h-touch items-center justify-center rounded-control bg-unity-amber px-4 py-3 text-sm font-semibold text-void-black"
+          className="bb-btn-primary mt-4"
         >
           Visit Resource
         </a>

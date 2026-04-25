@@ -52,19 +52,20 @@ export default function Timeline() {
   }
 
   return (
-    <main className="min-h-screen bg-void-black px-4 py-8 text-silver-white sm:px-6">
-      <section className="mx-auto w-full max-w-3xl rounded-2xl border border-neutral-gray/30 bg-slate-black p-5 sm:p-7">
+    <main className="bb-page">
+      <section className="bb-shell bb-panel max-w-3xl">
         <button
           type="button"
           onClick={handleBack}
-          className="h-8 -translate-y-3 self-start rounded-md border border-neutral-gray/40 bg-void-black px-2 py-0.5 text-[10px] font-medium text-silver-white"
+          className="bb-back mb-4"
         >
           Back
         </button>
-        <h1 className="text-2xl font-semibold sm:text-3xl">Private Timeline</h1>
+        <p className="bb-label">PRIVATE TIMELINE</p>
+        <h1 className="bb-title mt-2 text-2xl sm:text-3xl">Private Timeline</h1>
 
         {sessions.length === 0 ? (
-          <p className="mt-4 rounded-lg border border-neutral-gray/30 bg-void-black/40 p-4 text-sm text-neutral-gray">
+          <p className="mt-4 rounded-control border border-divider-gray bg-void-black/45 p-4 text-sm text-neutral-gray">
             No sessions saved yet.
           </p>
         ) : (
@@ -74,25 +75,22 @@ export default function Timeline() {
                 <button
                   type="button"
                   onClick={() => openReflection(session)}
-                  className="w-full rounded-xl border border-neutral-gray/30 bg-void-black/40 p-4 text-left transition hover:border-memory-violet/50"
+                  className="w-full rounded-card border border-divider-gray/80 bg-void-black/45 p-4 text-left transition hover:border-memory-violet/55 hover:shadow-violet-glow"
                 >
                   <p className="text-base font-semibold text-silver-white">
                     {session.title || `Session ${sessions.length - index}`}
                   </p>
-                  <p className="mt-1 text-sm text-neutral-gray">
+                  <p className="mt-1 text-sm text-mist-gray">
                     {formatSessionDate(session.savedAt || session.endedAt || session.startedAt)}
                   </p>
                   <div className="mt-3 flex flex-wrap gap-2">
                     {(Array.isArray(session.scenarioTags) ? session.scenarioTags : []).map((tag) => (
-                      <span
-                        key={`${session.id || index}-${tag}`}
-                        className="rounded-full border border-memory-violet/40 bg-memory-violet/10 px-2.5 py-1 text-xs text-silver-white"
-                      >
+                      <span key={`${session.id || index}-${tag}`} className="bb-chip">
                         {tag}
                       </span>
                     ))}
                   </div>
-                  <p className="mt-3 text-sm text-neutral-gray">
+                  <p className="mt-3 text-sm text-mist-gray">
                     Signal sent: <span className="text-silver-white">{session.signalSent ? 'Yes' : 'No'}</span>
                   </p>
                 </button>

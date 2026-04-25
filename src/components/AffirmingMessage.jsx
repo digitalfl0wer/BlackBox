@@ -5,7 +5,7 @@ export default function AffirmingMessage({ message }) {
   const resolvedMessage = message?.trim() || DEFAULT_MESSAGE
 
   return (
-    <article className="rounded-card border border-unity-amber/45 bg-surface-2 px-5 py-5 sm:px-6">
+    <article className="rounded-card border border-memory-violet/45 bg-gradient-to-br from-slate-black to-panel-black px-5 py-5 shadow-violet-glow sm:px-6">
       <p className="text-lg leading-8 text-silver-white">{resolvedMessage}</p>
     </article>
   )
