@@ -45,7 +45,7 @@ function syncPrimaryContact(contacts) {
   )
 }
 
-export default function Kinfolk() {
+export default function Kinfolk({ setupMode = false }) {
   const navigate = useNavigate()
   const [contacts, setContacts] = useState([])
   const [form, setForm] = useState(INITIAL_FORM)
@@ -76,6 +76,7 @@ export default function Kinfolk() {
       setError('Kinfolk name and contact are required.')
       return
     }
+    const isFirstSetupContact = setupMode && !editingId && contacts.length === 0
 
     const nextContact = {
       id: editingId || `${Date.now()}`,
@@ -96,6 +97,10 @@ export default function Kinfolk() {
     setEditingId(null)
     setShowForm(false)
     setError('')
+
+    if (isFirstSetupContact) {
+      navigate('/home', { replace: true })
+    }
   }
 
   function handleRemove(contactId) {
@@ -125,7 +130,7 @@ export default function Kinfolk() {
       kinfolkName: contact.kinfolkName || '',
       kinfolkContact: contact.kinfolkContact || '',
       preferredSignalMessage:
-        contact.preferredSignalMessage || 'Hi, this is a Black Boxx Signal. Please check on me when you can.',
+        contact.preferredSignalMessage || 'Hi, this is a Black Boxx Signal. Please check on me, I am feeling unsafe',
     })
     setEditingId(contact.id)
     setShowForm(true)
@@ -134,6 +139,10 @@ export default function Kinfolk() {
   function handleBack() {
     if (window.history.length > 1) {
       navigate(-1)
+      return
+    }
+    if (setupMode) {
+      navigate('/', { replace: true })
       return
     }
     navigate('/home', { replace: true })

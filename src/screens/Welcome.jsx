@@ -6,7 +6,7 @@ export default function Welcome() {
 
   return (
     <Landing
-      onEnter={() => navigate('/home')}
+      onEnter={() => navigate('/setup')}
       onWorkspace={() => navigate('/home')}
     />
   )
