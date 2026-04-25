@@ -596,8 +596,8 @@ This is the secure entry point for the entire agent pipeline. The OpenAI key liv
 ### T-47 · Client-side Orchestrator
 File: `src/agents/orchestrator.js`
 
-- [ ] Export `runAgentPipeline(sessionPayload)`
-- [ ] **[FIX — audio blob must not be sent to the API]** The `SessionPayload` includes `audioUrl`
+- [x] Export `runAgentPipeline(sessionPayload)`
+- [x] **[FIX — audio blob must not be sent to the API]** The `SessionPayload` includes `audioUrl`
   as a base64-encoded audio blob stored in localStorage. A 30-second recording encodes to ~1–2MB.
   Vercel serverless functions have a 4.5MB request body limit, and more importantly the agents only
   use `notes` and `scenarioTags` — the audio is never read server-side. Sending it wastes bandwidth
@@ -611,11 +611,11 @@ File: `src/agents/orchestrator.js`
   })
   ```
   The `audioUrl` stays in localStorage for the user's own record. It never goes to the server.
-- [ ] POST `safePayload` (no `audioUrl`) to `/api/reflect`
-- [ ] Parse and return JSON response
-- [ ] On network error or non-200 response: return `buildFallbackReflection(sessionPayload)`
-- [ ] Called from `ReflectionLoading.jsx` on mount
-- [ ] No OpenAI SDK imports — this file is client-side only
+- [x] POST `safePayload` (no `audioUrl`) to `/api/reflect`
+- [x] Parse and return JSON response
+- [x] On network error or non-200 response: return `buildFallbackReflection(sessionPayload)`
+- [x] Called from `ReflectionLoading.jsx` on mount
+- [x] No OpenAI SDK imports — this file is client-side only
 
 **Done when:** `runAgentPipeline()` called from ReflectionLoading returns real reflection data end-to-end. Confirm via Network tab in DevTools that the request body does not contain `audioUrl`.
 
@@ -636,9 +636,9 @@ File: `src/agents/orchestrator.js`
 ---
 
 ### T-51 · Loading and error states
-- [ ] Pipeline failure → fallback reflection shown + visible error notice
-- [ ] Mic permission denied → clear error message with instructions to enable
-- [ ] Kinfolk not configured → redirect to `/setup` with explanation
+- [x] Pipeline failure → fallback reflection shown + visible error notice
+- [x] Mic permission denied → clear error message with instructions to enable
+- [x] Kinfolk not configured → redirect to `/setup` with explanation
 - [ ] Test each error path by deliberately breaking the condition
 - [ ] No path ends in a blank screen or unhandled JS error
 

@@ -3,7 +3,8 @@ import { RESOURCES } from '../data/resources.js'
 const GENERAL_FALLBACK_RESOURCES = ['Crisis Text Line', '211 — United Way', 'National Center for Victims of Crime']
 
 export function buildFallbackReflection(sessionPayload) {
-  const tags = sessionPayload?.scenarioTags || []
+  const rawTags = sessionPayload?.scenarioTags
+  const tags = Array.isArray(rawTags) ? rawTags.filter((tag) => typeof tag === 'string' && tag.trim()) : []
 
   // Try to match at least 2–3 resources by the session's scenario tags
   let supportOptions = RESOURCES.filter((r) =>

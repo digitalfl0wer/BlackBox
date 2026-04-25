@@ -64,6 +64,12 @@ export default function ReflectionView() {
   return (
     <main className="bb-page">
       <section className="bb-shell max-w-4xl space-y-4">
+        {resolvedReflection.pipelineNotice ? (
+          <div className="rounded-control border border-unity-amber/50 bg-unity-amber/10 p-4 text-sm text-silver-white">
+            {resolvedReflection.pipelineNotice}
+          </div>
+        ) : null}
+
         <header className="bb-panel">
           <button
             type="button"

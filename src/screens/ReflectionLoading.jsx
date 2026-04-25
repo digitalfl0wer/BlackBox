@@ -62,8 +62,7 @@ export default function ReflectionLoading() {
     } catch (pipelineError) {
       if (!unmountedRef.current) {
         setError(
-          pipelineError?.message ||
-            'Unable to complete your reflection right now. Please retry.'
+          pipelineError?.message || 'Unable to load your reflection right now. Please retry.'
         )
       }
     } finally {
