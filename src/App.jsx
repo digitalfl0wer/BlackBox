@@ -11,19 +11,7 @@ const ReflectionLoading = getScreenComponent('ReflectionLoading')
 const ReflectionView = getScreenComponent('ReflectionView')
 const Timeline = getScreenComponent('Timeline')
 
-function hasKinfolkData() {
-  if (typeof window === 'undefined') {
-    return false
-  }
-
-  return Boolean(window.localStorage.getItem('blackbox_kinfolk'))
-}
-
 export function ProtectedRoute() {
-  if (!hasKinfolkData()) {
-    return <Navigate to="/setup" replace />
-  }
-
   return <Outlet />
 }
 
@@ -33,14 +21,12 @@ function AppRoutes() {
       <Route path="/" element={<Welcome />} />
       <Route path="/setup" element={<KinfolkSetup />} />
 
-      <Route element={<ProtectedRoute />}>
-        <Route path="/home" element={<Home />} />
-        <Route path="/session" element={<ActiveSession />} />
-        <Route path="/end" element={<EndSession />} />
-        <Route path="/reflecting" element={<ReflectionLoading />} />
-        <Route path="/reflection" element={<ReflectionView />} />
-        <Route path="/timeline" element={<Timeline />} />
-      </Route>
+      <Route path="/home" element={<Home />} />
+      <Route path="/session" element={<ActiveSession />} />
+      <Route path="/end" element={<EndSession />} />
+      <Route path="/reflecting" element={<ReflectionLoading />} />
+      <Route path="/reflection" element={<ReflectionView />} />
+      <Route path="/timeline" element={<Timeline />} />
 
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
