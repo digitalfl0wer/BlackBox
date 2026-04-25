@@ -35,7 +35,7 @@ Global Rules to follow (apply before coding):
 ## PHASE 0 — Setup (Est. 30 min)
 
 ### T-00 · Scaffold the project
-- [ ] Run scaffold commands:
+- [x] Run scaffold commands:
   ```bash
   npm create vite@latest black-box -- --template react
   cd black-box
@@ -43,11 +43,11 @@ Global Rules to follow (apply before coding):
   npm install tailwindcss @tailwindcss/vite react-router-dom openai
   npm install -g vercel
   ```
-- [ ] Init Tailwind: `npx tailwindcss init`
-- [ ] Configure `vite.config.js` to include Tailwind plugin
-- [ ] Create `.env.local` with `OPENAI_API_KEY=` (no `VITE_` prefix)
-- [ ] Delete boilerplate (`App.css`, `logo.svg`, default content in `App.jsx`)
-- [ ] Create folder structure:
+- [x] Init Tailwind: `npx tailwindcss init`
+- [x] Configure `vite.config.js` to include Tailwind plugin
+- [x] Create `.env.local` with `OPENAI_API_KEY=` (no `VITE_` prefix)
+- [x] Delete boilerplate (`App.css`, `logo.svg`, default content in `App.jsx`)
+- [x] Create folder structure:
   ```
   api/
   src/agents/
@@ -58,7 +58,7 @@ Global Rules to follow (apply before coding):
   src/data/
   ```
 
-- [ ] **[FIX — ESM/CJS crash on Vercel]** Vite scaffolds with `"type": "module"` in `package.json`.
+- [x] **[FIX — ESM/CJS crash on Vercel]** Vite scaffolds with `"type": "module"` in `package.json`.
   Vercel's Node runtime defaults to CommonJS for serverless functions, which causes `import` statements
   in `api/reflect.js` to throw a runtime error on deploy. Fix this now before writing any agent code:
 
@@ -78,7 +78,7 @@ Global Rules to follow (apply before coding):
   as ESM. Without this, `import OpenAI from 'openai'` in the serverless function crashes at runtime
   even though it works fine locally with `vercel dev`.
 
-- [ ] **[FIX — vercel dev requires auth before it works]** `vercel dev` will block on an interactive
+- [x] **[FIX — vercel dev requires auth before it works]** `vercel dev` will block on an interactive
   login prompt the first time it runs on a new machine. Do this before you need it mid-build:
   ```bash
   vercel login        # authenticate — opens browser or prompts email
@@ -88,23 +88,23 @@ Global Rules to follow (apply before coding):
   Skipping `vercel login` + `vercel link` means hitting an unexpected auth wall at 11 PM
   when your build momentum is running. Do it now.
 
-- [ ] Confirm `vercel dev` serves the React app at `localhost:3000` with no console errors
+- [x] Confirm `vercel dev` serves the React app at `localhost:3000` with no console errors
 
 **Done when:** `vercel dev` serves a blank React app at localhost:3000 with no errors. `vercel.json` present at root.
 
 ---
 
 ### T-01 · Define global design tokens
-- [ ] Extend `tailwind.config.js` with Black Box color palette:
+- [x] Extend `tailwind.config.js` with Black Box color palette:
   - Deep black: `#0A0A0A`
   - Off-white: `#F5F0EB`
   - Warm amber: `#C8933A`
   - Muted sage: `#6B7B6E`
   - Alert red: `#C0392B` (use sparingly)
-- [ ] Load `DM Sans` via Google Fonts in `index.html`
-- [ ] Set `font-family` globally in `index.css`
-- [ ] Set body background to deep black in `index.css`
-- [ ] Confirm custom color classes work in a test `<div>`
+- [x] Load `DM Sans` via Google Fonts in `index.html`
+- [x] Set `font-family` globally in `index.css`
+- [x] Set body background to deep black in `index.css`
+- [x] Confirm custom color classes work in a test `<div>`
 
 **Done when:** Custom color classes render correctly and body background is set.
 
@@ -115,8 +115,8 @@ Global Rules to follow (apply before coding):
 ### T-10 · Build `useRecorder` hook
 File: `src/hooks/useRecorder.js`
 
-- [ ] Request `getUserMedia({ audio: true })`
-- [ ] **[FIX — iOS Safari MediaRecorder format mismatch]** `MediaRecorder` on iOS Safari only supports
+- [x] Request `getUserMedia({ audio: true })`
+- [x] **[FIX — iOS Safari MediaRecorder format mismatch]** `MediaRecorder` on iOS Safari only supports
   `audio/mp4`, not `audio/webm` (Chrome/Android default). Passing no mimeType or the wrong type causes
   recording to fail silently or throw on iPhone. Detect the supported format before initializing:
   ```javascript
@@ -128,12 +128,12 @@ File: `src/hooks/useRecorder.js`
   const recorder = new MediaRecorder(stream, mimeType ? { mimeType } : {})
   ```
   This ensures recording works on any browser a judge might use — Chrome, Firefox, Safari, Android.
-- [ ] Initialize `MediaRecorder` on permission grant using the format check above
-- [ ] `startRecording()` — begins recording, collects chunks via `ondataavailable`
-- [ ] `stopRecording()` — assembles chunks into audio `Blob`, returns it
-- [ ] Expose `recordingState`: `'idle' | 'recording' | 'stopped'`
-- [ ] Expose `elapsedSeconds` — increments via `setInterval` while recording
-- [ ] Handle mic permission denied gracefully — set error state, never throw to UI
+- [x] Initialize `MediaRecorder` on permission grant using the format check above
+- [x] `startRecording()` — begins recording, collects chunks via `ondataavailable`
+- [x] `stopRecording()` — assembles chunks into audio `Blob`, returns it
+- [x] Expose `recordingState`: `'idle' | 'recording' | 'stopped'`
+- [x] Expose `elapsedSeconds` — increments via `setInterval` while recording
+- [x] Handle mic permission denied gracefully — set error state, never throw to UI
 - [ ] Test: button starts/stops recording and logs blob to console
 
 **Done when:** Start/stop recording works and audio blob is logged to console. Test in both Chrome and Safari if possible.
@@ -143,7 +143,7 @@ File: `src/hooks/useRecorder.js`
 ### T-11 · Build `SessionContext`
 File: `src/context/SessionContext.jsx`
 
-- [ ] Define state shape:
+- [x] Define state shape:
   ```javascript
   {
     isRecording: false,
@@ -156,15 +156,15 @@ File: `src/context/SessionContext.jsx`
     reflection: null,
   }
   ```
-- [ ] Implement `startSession()` — sets `isRecording: true`, generates `sessionId` (uuid or Date.now()), sets `startedAt`
-- [ ] Implement `endSession()` — sets `isRecording: false`
-- [ ] Implement `enterDiscreet()` — sets `isDiscreet: true`
-- [ ] Implement `exitDiscreet()` — sets `isDiscreet: false`
-- [ ] Implement `sendSignal()` — sets `signalSent: true`, `signalSentAt`
-- [ ] Implement `saveSession(payload)` — writes to `localStorage` key `blackbox_sessions`
-- [ ] Implement `setReflection(data)` — stores completed reflection in state + localStorage
-- [ ] Wrap `App.jsx` in `<SessionProvider>`
-- [ ] Confirm context values persist across route changes
+- [x] Implement `startSession()` — sets `isRecording: true`, generates `sessionId` (uuid or Date.now()), sets `startedAt`
+- [x] Implement `endSession()` — sets `isRecording: false`
+- [x] Implement `enterDiscreet()` — sets `isDiscreet: true`
+- [x] Implement `exitDiscreet()` — sets `isDiscreet: false`
+- [x] Implement `sendSignal()` — sets `signalSent: true`, `signalSentAt`
+- [x] Implement `saveSession(payload)` — writes to `localStorage` key `blackbox_sessions`
+- [x] Implement `setReflection(data)` — stores completed reflection in state + localStorage
+- [x] Wrap `App.jsx` in `<SessionProvider>`
+- [x] Confirm context values persist across route changes
 
 **Done when:** Context values accessible from any component, survive navigation.
 
@@ -173,8 +173,8 @@ File: `src/context/SessionContext.jsx`
 ### T-12 · Set up React Router
 File: `src/App.jsx`
 
-- [ ] Install and configure `BrowserRouter`
-- [ ] Define routes:
+- [x] Install and configure `BrowserRouter`
+- [x] Define routes:
   ```
   /           → Welcome
   /setup      → KinfolkSetup
@@ -185,8 +185,8 @@ File: `src/App.jsx`
   /reflection → ReflectionView
   /timeline   → Timeline
   ```
-- [ ] Create `<ProtectedRoute>` — redirects to `/setup` if `blackbox_kinfolk` not in localStorage
-- [ ] Protect: `/home`, `/session`, `/end`, `/reflecting`, `/reflection`, `/timeline`
+- [x] Create `<ProtectedRoute>` — redirects to `/setup` if `blackbox_kinfolk` not in localStorage
+- [x] Protect: `/home`, `/session`, `/end`, `/reflecting`, `/reflection`, `/timeline`
 - [ ] Confirm all routes navigate without console errors
 
 **Done when:** All routes navigate correctly. Missing Kinfolk redirects to setup.
