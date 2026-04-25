@@ -1,8 +1,9 @@
-node_modules
-dist
+node_modules/
+dist/
+.vite/
+.vercel/
+.env.local
 .env
 .env.*
 !.env.example
 .DS_Store
-.vercel
-.vite/
