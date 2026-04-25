@@ -445,19 +445,19 @@ File: `src/components/ResourceCard.jsx`
 ### T-40 · Curated resource data
 File: `src/data/resources.js`
 
-- [ ] Build static array with minimum 2–3 resources per scenario tag category
-- [ ] Required entries:
-  - [ ] National Domestic Violence Hotline (Relationship Safety)
-  - [ ] RAINN (Boundary / Consent Concern)
-  - [ ] ACLU Know Your Rights (Police Encounter)
-  - [ ] EEOC (Workplace Concern)
-  - [ ] Crisis Text Line (Immediate Safety / Medical Concern)
-  - [ ] Coalition Against Stalkerware (Stalking / Unwanted Contact)
-  - [ ] Polaris Project (Exploitation / Restricted Movement)
-  - [ ] NAACP Legal Defense Fund (Police Encounter / civil rights)
-  - [ ] Digital Defense Fund (Digital Safety)
-- [ ] Every scenario tag has at least 2 matched resources
-- [ ] Each entry has: `{ name, category, description, url }`
+- [x] Build static array with minimum 2–3 resources per scenario tag category
+- [x] Required entries:
+  - [x] National Domestic Violence Hotline (Relationship Safety)
+  - [x] RAINN (Boundary / Consent Concern)
+  - [x] ACLU Know Your Rights (Police Encounter)
+  - [x] EEOC (Workplace Concern)
+  - [x] Crisis Text Line (Immediate Safety / Medical Concern)
+  - [x] Coalition Against Stalkerware (Stalking / Unwanted Contact)
+  - [x] Polaris Project (Exploitation / Restricted Movement)
+  - [x] NAACP Legal Defense Fund (Police Encounter / civil rights)
+  - [x] Digital Defense Fund (Digital Safety)
+- [x] Every scenario tag has at least 2 matched resources
+- [x] Each entry has: `{ name, category, description, url }`
 
 **Done when:** All 10 scenario tag categories have matching resources in the array.
 
@@ -466,12 +466,12 @@ File: `src/data/resources.js`
 ### T-41 · Keyword detection (rule-based)
 File: `src/agents/keywords.js`
 
-- [ ] Export `KEYWORD_CATEGORIES` object — full phrase lists for all 10 categories from the original PRD
-- [ ] Export `detectKeywords(text)` function:
-  - [ ] Lowercases input
-  - [ ] Scans against all phrase lists
-  - [ ] Returns `{ categories: string[], flaggedPhrases: { phrase, category }[] }` deduplicated
-- [ ] Test: `detectKeywords("i said no and i need help")` returns `['Boundary / Consent Concern', 'Immediate Safety']`
+- [x] Export `KEYWORD_CATEGORIES` object — full phrase lists for all 10 categories from the original PRD
+- [x] Export `detectKeywords(text)` function:
+  - [x] Lowercases input
+  - [x] Scans against all phrase lists
+  - [x] Returns `{ categories: string[], flaggedPhrases: { phrase, category }[] }` deduplicated
+- [x] Test: `detectKeywords("i said no and i need help")` returns `['Boundary / Consent Concern', 'Immediate Safety']`
 
 **Done when:** Function returns correct categories and phrases for a test input.
 
@@ -480,13 +480,13 @@ File: `src/agents/keywords.js`
 ### T-42 · KeywordAgent
 File: `src/agents/keywordAgent.js`
 
-- [ ] Accept `(sessionPayload, openai)` — openai instance passed from `api/reflect.js`
-- [ ] Pass 1: call `detectKeywords(sessionPayload.notes)` — rule-based, zero latency
-- [ ] Pass 2: send flagged phrases + notes to `gpt-4o-mini` with `response_format: { type: 'json_object' }`
-- [ ] System prompt: safety signal analyzer, uses "possible" / "may suggest" / "worth reviewing" only, returns structured JSON
-- [ ] Merge rule-based + LLM results, deduplicate categories
-- [ ] Return: `{ categories, flaggedPhrases: [{ phrase, category, urgency }], requiresImmediateSignal }`
-- [ ] If notes are empty: return empty categories, skip LLM call
+- [x] Accept `(sessionPayload, openai)` — openai instance passed from `api/reflect.js`
+- [x] Pass 1: call `detectKeywords(sessionPayload.notes)` — rule-based, zero latency
+- [x] Pass 2: send flagged phrases + notes to `gpt-4o-mini` with `response_format: { type: 'json_object' }`
+- [x] System prompt: safety signal analyzer, uses "possible" / "may suggest" / "worth reviewing" only, returns structured JSON
+- [x] Merge rule-based + LLM results, deduplicate categories
+- [x] Return: `{ categories, flaggedPhrases: [{ phrase, category, urgency }], requiresImmediateSignal }`
+- [x] If notes are empty: return empty categories, skip LLM call
 
 **Done when:** Agent returns valid JSON with categories + flagged phrases for a test session with notes.
 
@@ -495,12 +495,12 @@ File: `src/agents/keywordAgent.js`
 ### T-43 · ResourceAgent
 File: `src/agents/resourceAgent.js`
 
-- [ ] Accept `(categories, openai)` — openai instance passed from `api/reflect.js`
-- [ ] Import and pass `RESOURCES` array to LLM as context — agent selects from list, never generates
-- [ ] Call `gpt-4o-mini` with `response_format: { type: 'json_object' }`
-- [ ] System prompt: "Select the 3–4 most relevant resources from the provided list only. Do not add organizations not in the list."
-- [ ] Return: `{ resources: [...] }` — subset of the static list
-- [ ] If categories is empty: return 2 general safety resources as defaults
+- [x] Accept `(categories, openai)` — openai instance passed from `api/reflect.js`
+- [x] Import and pass `RESOURCES` array to LLM as context — agent selects from list, never generates
+- [x] Call `gpt-4o-mini` with `response_format: { type: 'json_object' }`
+- [x] System prompt: "Select the 3–4 most relevant resources from the provided list only. Do not add organizations not in the list."
+- [x] Return: `{ resources: [...] }` — subset of the static list
+- [x] If categories is empty: return 2 general safety resources as defaults
 
 **Done when:** Agent returns 3–4 resources matched to test categories with zero hallucinated org names.
 
@@ -509,14 +509,14 @@ File: `src/agents/resourceAgent.js`
 ### T-44 · ReflectionAgent
 File: `src/agents/reflectionAgent.js`
 
-- [ ] Accept `({ sessionPayload, keywordAnalysis, resources }, openai)`
-- [ ] Build prompt from all inputs: notes, tags, flagged phrases, resource names
-- [ ] Call `gpt-4o` with `response_format: { type: 'json_object' }`
-- [ ] System prompt (use verbatim from PRD §5):
+- [x] Accept `({ sessionPayload, keywordAnalysis, resources }, openai)`
+- [x] Build prompt from all inputs: notes, tags, flagged phrases, resource names
+- [x] Call `gpt-4o` with `response_format: { type: 'json_object' }`
+- [x] System prompt (use verbatim from PRD §5):
   > "You are an AI safety reflection assistant inside Black Box. Your role is to help users organize what happened, notice possible concern areas, and connect to support. You are not a lawyer, therapist, emergency responder, investigator, or judge. Do not determine whether a crime occurred. Do not give legal advice. Do not diagnose abuse, trauma, manipulation, or mental health conditions. Do not pressure the user to report. Do not tell the user to confront the other person. Do not claim certainty. Use plain language. Use trauma-aware, culturally respectful wording. Prioritize user safety, dignity, and control."
-- [ ] Return schema enforced in prompt: all 8 sections of `AIReflection`
-- [ ] Parse and validate JSON response before returning
-- [ ] Throw descriptive error if response is missing required sections
+- [x] Return schema enforced in prompt: all 8 sections of `AIReflection`
+- [x] Parse and validate JSON response before returning
+- [x] Throw descriptive error if response is missing required sections
 
 **Done when:** Agent returns valid, parseable JSON with all 8 sections populated for a test session.
 
@@ -525,14 +525,14 @@ File: `src/agents/reflectionAgent.js`
 ### T-45 · Fallback builder
 File: `src/agents/fallback.js`
 
-- [ ] Export `buildFallbackReflection(sessionPayload)` function
-- [ ] Returns a valid `AIReflection` object with safe, non-alarming content
-- [ ] `summary`: "We weren't able to generate a full reflection for this session. Your record has been saved."
-- [ ] `whatThisDoesNotMean`: standard guardrail copy
-- [ ] `affirmingMessage`: "You took an important step by documenting this. Your record is saved. When you're ready, consider reaching out to someone you trust or a trained advocate."
-- [ ] `supportOptions`: 2–3 general resources from `RESOURCES`
-- [ ] All other fields: empty arrays or placeholder strings — no nulls
-- [ ] Importable from both `api/reflect.js` (server) and `src/agents/orchestrator.js` (client)
+- [x] Export `buildFallbackReflection(sessionPayload)` function
+- [x] Returns a valid `AIReflection` object with safe, non-alarming content
+- [x] `summary`: "We weren't able to generate a full reflection for this session. Your record has been saved."
+- [x] `whatThisDoesNotMean`: standard guardrail copy
+- [x] `affirmingMessage`: "You took an important step by documenting this. Your record is saved. When you're ready, consider reaching out to someone you trust or a trained advocate."
+- [x] `supportOptions`: 2–3 general resources from `RESOURCES`
+- [x] All other fields: empty arrays or placeholder strings — no nulls
+- [x] Importable from both `api/reflect.js` (server) and `src/agents/orchestrator.js` (client)
 
 **Done when:** Function returns a complete, valid `AIReflection` object with no null fields.
 
@@ -543,20 +543,20 @@ File: `api/reflect.js`
 
 This is the secure entry point for the entire agent pipeline. The OpenAI key lives here only.
 
-- [ ] Import `OpenAI` from `'openai'`
-- [ ] Import `runKeywordAgent`, `runResourceAgent`, `runReflectionAgent` from `../src/agents/`
-- [ ] Import `buildFallbackReflection` from `../src/agents/fallback.js`
-- [ ] Initialize `openai` with `process.env.OPENAI_API_KEY` (no `VITE_` prefix)
-- [ ] Reject non-POST requests with 405
-- [ ] Reject missing `sessionPayload` with 400
-- [ ] Run pipeline sequentially:
+- [x] Import `OpenAI` from `'openai'`
+- [x] Import `runKeywordAgent`, `runResourceAgent`, `runReflectionAgent` from `../src/agents/`
+- [x] Import `buildFallbackReflection` from `../src/agents/fallback.js`
+- [x] Initialize `openai` with `process.env.OPENAI_API_KEY` (no `VITE_` prefix)
+- [x] Reject non-POST requests with 405
+- [x] Reject missing `sessionPayload` with 400
+- [x] Run pipeline sequentially:
   ```javascript
   const keywordAnalysis = await runKeywordAgent(sessionPayload, openai)
   const resources = await runResourceAgent(keywordAnalysis.categories, openai)
   const reflection = await runReflectionAgent({ sessionPayload, keywordAnalysis, resources }, openai)
   ```
-- [ ] Return `res.status(200).json(reflection)` on success
-- [ ] Catch all errors → return `res.status(200).json(buildFallbackReflection(sessionPayload))` — never a 500 to the user
+- [x] Return `res.status(200).json(reflection)` on success
+- [x] Catch all errors → return `res.status(200).json(buildFallbackReflection(sessionPayload))` — never a 500 to the user
 
 - [ ] **[FIX — smoke test the pipeline before building any UI]** Do not wire the pipeline into
   the UI until you confirm it works end-to-end from the terminal. Discovering a broken agent
@@ -589,6 +589,7 @@ This is the secure entry point for the entire agent pipeline. The OpenAI key liv
 - [ ] Confirm API key is NOT in the response or visible in browser DevTools → Sources
 
 **Done when:** Smoke test passes in terminal. Endpoint returns valid 8-section reflection. Key confirmed server-side only.
+<!-- Server-side pipeline implemented. Smoke test required with `vercel dev` + curl (needs OPENAI_API_KEY set in .env.local). -->
 
 ---
 
