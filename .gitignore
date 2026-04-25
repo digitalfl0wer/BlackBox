@@ -1,8 +1,9 @@
+
+.env.local
 node_modules/
 dist/
 .vite/
 .vercel/
-.env.local
 .env
 .env.*
 !.env.example
