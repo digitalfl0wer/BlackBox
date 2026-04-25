@@ -44,7 +44,7 @@ export default function Home() {
             ) : (
               <p>
                 Kinfolk status: <span className="text-[#F5A623]">Add one</span>{' '}
-                <button type="button" onClick={() => navigate('/kinfolk')} className="underline">
+                <button type="button" onClick={() => navigate('/setup')} className="underline">
                   now
                 </button>
               </p>
@@ -76,7 +76,7 @@ export default function Home() {
             </button>
             <button
               type="button"
-              onClick={() => navigate('/kinfolk')}
+              onClick={() => navigate(kinfolk?.kinfolkName ? '/kinfolk' : '/setup')}
               className="min-h-[4.5rem] rounded-2xl border border-[#F5A623]/55 bg-[#2A2010] px-4 text-left text-white"
             >
               <p className="bbx-font-display text-xl">Kinfolk</p>

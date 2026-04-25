@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { Navigate, useNavigate } from 'react-router-dom'
 import { useSession } from '../context/SessionContext'
 
-export function SessionReflection({ reflection, session, onBack }) {
+export function SessionReflection({ reflection, session, onBack, onHome }) {
   const [expandedSection, setExpandedSection] = useState(null)
 
   if (!reflection) return null
@@ -36,7 +36,10 @@ export function SessionReflection({ reflection, session, onBack }) {
       <section className="bbx-shell max-w-4xl">
         <div className="bbx-card p-4 sm:p-6 lg:p-8">
           <header className="flex items-center justify-between gap-3">
-            <button type="button" className="bbx-back" onClick={onBack}>← Back</button>
+            <div className="flex items-center gap-2">
+              <button type="button" className="bbx-back" onClick={onBack}>← Back</button>
+              <button type="button" className="bbx-back" onClick={onHome}>Home</button>
+            </div>
             <p className="text-[10px] font-medium tracking-[0.2em] text-[#555570]">AI REFLECTION</p>
           </header>
 
@@ -252,11 +255,16 @@ export default function SessionReflectionRoute() {
     navigate('/home', { replace: true })
   }
 
+  function handleHome() {
+    navigate('/home')
+  }
+
   return (
     <SessionReflection
       reflection={resolvedReflection}
       session={resolvedSession}
       onBack={handleBack}
+      onHome={handleHome}
     />
   )
 }
