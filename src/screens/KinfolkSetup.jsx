@@ -69,6 +69,10 @@ export default function KinfolkSetup() {
     navigate('/home')
   }
 
+  function handleSkip() {
+    navigate('/home')
+  }
+
   function handleBack() {
     if (window.history.length > 1) {
       navigate(-1)
@@ -91,6 +95,9 @@ export default function KinfolkSetup() {
         <h1 className="text-2xl font-semibold text-silver-white sm:text-3xl">Set Up Your Kinfolk</h1>
         <p className="mt-2 text-sm text-neutral-gray sm:text-base">
           Add the person you trust so your Signal details stay ready before you need them.
+        </p>
+        <p className="mt-2 text-sm text-neutral-gray/85">
+          You can skip this for now and add Kinfolk later from Home.
         </p>
 
         <form className="mt-6 space-y-4" onSubmit={handleSubmit} noValidate>
@@ -175,6 +182,14 @@ export default function KinfolkSetup() {
             className="min-h-12 w-full rounded-lg bg-unity-amber px-4 py-3 text-sm font-semibold text-void-black transition disabled:cursor-not-allowed disabled:opacity-50"
           >
             Save Kinfolk
+          </button>
+
+          <button
+            type="button"
+            onClick={handleSkip}
+            className="min-h-12 w-full rounded-lg border border-neutral-gray/35 bg-transparent px-4 py-3 text-sm font-medium text-neutral-gray transition hover:text-silver-white"
+          >
+            Skip for now
           </button>
         </form>
       </section>
