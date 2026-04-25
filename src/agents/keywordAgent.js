@@ -1,7 +1,7 @@
 import { detectKeywords } from './keywords.js'
 
 const SYSTEM_PROMPT = `You are a safety signal analyzer for a personal documentation app.
-Your job is to review user-written notes for possible safety concerns.
+Your job is to review user-written notes and audio transcript for possible safety concerns.
 
 Rules:
 - Use "possible", "may suggest", "worth reviewing" — never state conclusions as fact
@@ -25,13 +25,17 @@ Urgency levels:
 
 export async function runKeywordAgent(sessionPayload, openai) {
   const notes = sessionPayload?.notes || ''
+  const transcript = sessionPayload?.transcript || ''
   const scenarioTags = sessionPayload?.scenarioTags || []
 
-  // Pass 1: rule-based, zero latency
-  const ruleResults = detectKeywords(notes)
+  // Combine notes and transcript — transcript is primary when notes are sparse
+  const combinedText = [transcript, notes].filter(Boolean).join('\n\n')
 
-  // If notes are empty, return rule results only (tags may still provide category signal)
-  if (!notes.trim()) {
+  // Pass 1: rule-based, zero latency
+  const ruleResults = detectKeywords(combinedText)
+
+  // If no text at all, return tag-only categories
+  if (!combinedText.trim()) {
     const tagCategories = scenarioTags.filter(Boolean)
     return {
       categories: Array.from(new Set([...ruleResults.categories, ...tagCategories])),
@@ -42,15 +46,19 @@ export async function runKeywordAgent(sessionPayload, openai) {
 
   // Pass 2: LLM validation
   try {
+    const textParts = []
+    if (transcript) textParts.push(`Audio transcript:\n${transcript}`)
+    if (notes) textParts.push(`User notes:\n${notes}`)
+
     const userMessage = [
       `Session scenario tags: ${scenarioTags.length ? scenarioTags.join(', ') : 'None'}`,
-      `User notes:\n${notes}`,
+      ...textParts,
       `Rule-based phrases already detected: ${
         ruleResults.flaggedPhrases.length
           ? ruleResults.flaggedPhrases.map((p) => `"${p.phrase}" (${p.category})`).join(', ')
           : 'none'
       }`,
-      'Analyze the notes and return the JSON schema described in the system prompt.',
+      'Analyze the text and return the JSON schema described in the system prompt.',
     ].join('\n\n')
 
     const response = await openai.chat.completions.create({
@@ -66,7 +74,6 @@ export async function runKeywordAgent(sessionPayload, openai) {
 
     const llmResult = JSON.parse(response.choices[0].message.content)
 
-    // Merge and deduplicate rule-based + LLM results
     const mergedCategories = Array.from(
       new Set([
         ...ruleResults.categories,
@@ -76,15 +83,12 @@ export async function runKeywordAgent(sessionPayload, openai) {
     )
 
     const llmPhrases = Array.isArray(llmResult.flaggedPhrases) ? llmResult.flaggedPhrases : []
-
-    // Rule-based phrases get urgency 'informational' as default; LLM phrases keep their urgency
     const rulePhrases = ruleResults.flaggedPhrases.map((p) => ({
       phrase: p.phrase,
       category: p.category,
       urgency: 'informational',
     }))
 
-    // Deduplicate phrases by phrase text
     const seenPhrases = new Set()
     const mergedPhrases = []
     for (const p of [...llmPhrases, ...rulePhrases]) {
@@ -106,7 +110,6 @@ export async function runKeywordAgent(sessionPayload, openai) {
     }
   } catch (err) {
     console.error('KeywordAgent LLM pass failed, returning rule-based results:', err?.message)
-    // Graceful degradation: return rule-based results with scenario tags
     return {
       categories: Array.from(new Set([...ruleResults.categories, ...scenarioTags.filter(Boolean)])),
       flaggedPhrases: ruleResults.flaggedPhrases.map((p) => ({

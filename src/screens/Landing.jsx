@@ -42,7 +42,7 @@ export default function Landing({ onEnter, onWorkspace }) {
             <div className="landing-cube-glow-amber" />
             <div className="landing-cube-glow-purple" />
             <img
-              src="/images/logocube1.PNG"
+              src="/images/logocube1.png"
               alt="Black Boxx Unity Cube"
               className="landing-cube-image"
             />

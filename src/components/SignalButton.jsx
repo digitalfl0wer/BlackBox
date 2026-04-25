@@ -70,25 +70,27 @@ export default function SignalButton({
       sendSignal()
     }
 
-    setIsModalOpen(false)
+    closeModal()
     setShowToast(true)
   }
 
   return (
     <>
-      <button
-        type="button"
-        disabled={disabled || signalSent}
-        onClick={() => setIsModalOpen(true)}
-        className={joinClasses(
-          'min-h-touch rounded-control px-4 py-3 text-sm font-semibold disabled:cursor-not-allowed disabled:opacity-60',
-          className
-        )}
-      >
-        {signalSent ? 'Signal Sent' : 'Send Signal'}
-      </button>
+      {!externalOpen ? (
+        <button
+          type="button"
+          disabled={disabled || signalSent}
+          onClick={() => setIsModalOpen(true)}
+          className={joinClasses(
+            'min-h-touch rounded-control px-4 py-3 text-sm font-semibold disabled:cursor-not-allowed disabled:opacity-60',
+            className
+          )}
+        >
+          {signalSent ? 'Signal Sent' : 'Send Signal'}
+        </button>
+      ) : null}
 
-      {isModalOpen ? (
+      {modalVisible ? (
         <div className="fixed inset-0 z-50 flex items-end bg-void-black/82 p-4 backdrop-blur-sm sm:items-center sm:justify-center sm:p-6">
           <section className="w-full max-w-xl rounded-card border border-divider-gray bg-slate-black/90 p-5 text-silver-white shadow-panel-glow sm:p-6">
             <p className="bb-label">SIGNAL PREVIEW</p>
@@ -112,7 +114,7 @@ export default function SignalButton({
               </button>
               <button
                 type="button"
-                onClick={() => setIsModalOpen(false)}
+                onClick={closeModal}
                 className="bb-btn-secondary"
               >
                 Cancel

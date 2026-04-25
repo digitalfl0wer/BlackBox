@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import Discreet from './Discreet'
+import SignalButton from '../components/SignalButton'
 import { useSession } from '../context/SessionContext'
 
 function readKinfolk() {
@@ -181,9 +182,9 @@ export default function ActiveSessionRoute() {
     exitDiscreet,
     startSession,
     endSession,
-    sendSignal,
   } = useSession()
 
+  const [showSignalModal, setShowSignalModal] = useState(false)
   const kinfolk = useMemo(() => readKinfolk(), [])
 
   async function handleStartRecording() {
@@ -211,7 +212,7 @@ export default function ActiveSessionRoute() {
 
   function handleSendSignal() {
     if (!isRecording) return
-    sendSignal()
+    setShowSignalModal(true)
   }
 
   return (
@@ -226,6 +227,10 @@ export default function ActiveSessionRoute() {
         isRecording={isRecording}
         onStartRecording={handleStartRecording}
         recorderError={recorderError}
+      />
+      <SignalButton
+        externalOpen={showSignalModal}
+        onExternalClose={() => setShowSignalModal(false)}
       />
       {isDiscreet ? <Discreet onExit={exitDiscreet} /> : null}
     </>

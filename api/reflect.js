@@ -31,6 +31,7 @@ function normalizeSessionPayload(payload) {
   return {
     ...payload,
     notes: typeof payload.notes === 'string' ? payload.notes : '',
+    transcript: typeof payload.transcript === 'string' ? payload.transcript.trim() : '',
     scenarioTags: normalizedTags,
   }
 }
