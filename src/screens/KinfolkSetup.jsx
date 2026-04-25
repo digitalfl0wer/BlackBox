@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 
 const INITIAL_VALUES = {
   yourName: '',
@@ -13,6 +13,7 @@ const INITIAL_VALUES = {
 
 export default function KinfolkSetup() {
   const navigate = useNavigate()
+  const location = useLocation()
 
   const [values, setValues] = useState(INITIAL_VALUES)
   const [submitError, setSubmitError] = useState('')
@@ -100,6 +101,11 @@ export default function KinfolkSetup() {
         <p className="mt-2 text-sm text-neutral-gray/90">
           You can skip this for now and add Kinfolk later from Home.
         </p>
+        {location.state?.notice ? (
+          <p className="mt-3 rounded-control border border-unity-amber/45 bg-unity-amber/10 p-3 text-sm text-silver-white">
+            {location.state.notice}
+          </p>
+        ) : null}
 
         <form className="mt-6 space-y-4" onSubmit={handleSubmit} noValidate>
           <label className="block">
