@@ -1,3 +1,5 @@
+import { buildFallbackReflection } from './fallback.js'
+
 const REQUIRED_FIELDS = [
   'summary',
   'timeline',
@@ -21,32 +23,28 @@ export async function runAgentPipeline(sessionPayload) {
   const resolvedPayload = sessionPayload && typeof sessionPayload === 'object' ? sessionPayload : {}
   const { audioUrl: _audioUrl, ...safePayload } = resolvedPayload
 
-  const response = await fetch('/api/reflect', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ sessionPayload: safePayload }),
-  })
+  try {
+    const response = await fetch('/api/reflect', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ sessionPayload: safePayload }),
+    })
 
-  if (!response.ok) {
-    let message = `Reflection API returned ${response.status}.`
-    try {
-      const errorPayload = await response.json()
-      if (typeof errorPayload?.message === 'string' && errorPayload.message.trim()) {
-        message = errorPayload.message
-      } else if (typeof errorPayload?.error === 'string' && errorPayload.error.trim()) {
-        message = errorPayload.error
-      }
-    } catch {
-      // Keep default status-based message.
+    if (!response.ok) {
+      console.error(`Reflection API returned ${response.status} — using fallback.`)
+      return buildFallbackReflection(resolvedPayload)
     }
-    throw new Error(message)
+
+    const data = await response.json()
+
+    if (!hasRequiredReflectionShape(data)) {
+      console.error('Reflection response was malformed — using fallback.')
+      return buildFallbackReflection(resolvedPayload)
+    }
+
+    return data
+  } catch (networkError) {
+    console.error('Reflection request failed:', networkError?.message)
+    return buildFallbackReflection(resolvedPayload)
   }
-
-  const data = await response.json()
-
-  if (!hasRequiredReflectionShape(data)) {
-    throw new Error('Reflection response was malformed.')
-  }
-
-  return data
 }

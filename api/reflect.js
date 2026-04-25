@@ -2,6 +2,7 @@ import OpenAI from 'openai'
 import { runKeywordAgent } from '../src/agents/keywordAgent.js'
 import { runResourceAgent } from '../src/agents/resourceAgent.js'
 import { runReflectionAgent } from '../src/agents/reflectionAgent.js'
+import { buildFallbackReflection } from '../src/agents/fallback.js'
 
 function createOpenAIClient() {
   const apiKey = process.env.OPENAI_API_KEY?.trim()
@@ -34,14 +35,6 @@ function normalizeSessionPayload(payload) {
   }
 }
 
-function getErrorStatus(error) {
-  const status = Number(error?.status || error?.statusCode || 0)
-  if (status >= 400 && status < 600) {
-    return status
-  }
-  return 502
-}
-
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' })
@@ -57,20 +50,13 @@ export default async function handler(req, res) {
   const openai = createOpenAIClient()
 
   if (!openai) {
-    console.error('OPENAI_API_KEY missing or invalid.')
-    return res.status(500).json({
-      error: 'OPENAI_API_KEY is missing or invalid in the runtime environment.',
-    })
+    console.error('OPENAI_API_KEY missing or invalid — returning fallback reflection.')
+    return res.status(200).json(buildFallbackReflection(normalizedPayload))
   }
 
-  let stage = 'keyword'
   try {
     const keywordAnalysis = await runKeywordAgent(normalizedPayload, openai)
-
-    stage = 'resource'
     const resources = await runResourceAgent(keywordAnalysis.categories, openai)
-
-    stage = 'reflection'
     const reflection = await runReflectionAgent(
       { sessionPayload: normalizedPayload, keywordAnalysis, resources },
       openai
@@ -79,10 +65,6 @@ export default async function handler(req, res) {
     return res.status(200).json(reflection)
   } catch (error) {
     console.error('Agent pipeline error:', error?.message || error)
-    return res.status(getErrorStatus(error)).json({
-      error: 'Failed to generate reflection.',
-      stage: error?.stage || stage,
-      message: error?.message || 'Unknown pipeline error.',
-    })
+    return res.status(200).json(buildFallbackReflection(normalizedPayload))
   }
 }

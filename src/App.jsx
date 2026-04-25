@@ -1,4 +1,4 @@
-import { BrowserRouter, Navigate, Outlet, Route, Routes } from 'react-router-dom'
+import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
 import { SessionProvider } from './context/SessionContext'
 import { getScreenComponent } from './routing/getScreenComponent'
 
@@ -10,10 +10,6 @@ const EndSession = getScreenComponent('EndSession')
 const ReflectionLoading = getScreenComponent('ReflectionLoading')
 const ReflectionView = getScreenComponent('ReflectionView')
 const Timeline = getScreenComponent('Timeline')
-
-export function ProtectedRoute() {
-  return <Outlet />
-}
 
 function AppRoutes() {
   return (
