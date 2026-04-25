@@ -2,17 +2,45 @@
 @import 'tailwindcss';
 
 :root {
+  --bb-color-void-black: #0a0a0a;
+  --bb-color-off-white: #f5f0eb;
+  --bb-color-amber: #c8933a;
+  --bb-color-sage: #6b7b6e;
+  --bb-color-alert-red: #c0392b;
+  --bb-radius-control: 12px;
+  --bb-radius-card: 16px;
+  --bb-space-touch: 48px;
   font-family: 'DM Sans', system-ui, sans-serif;
+  line-height: 1.5;
+  text-rendering: optimizeLegibility;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
 }
 
 body {
   margin: 0;
   min-height: 100vh;
-  background-color: #0A0A0D;
-  color: #E6E6E8;
+  background-color: var(--bb-color-void-black);
+  color: var(--bb-color-off-white);
   font-family: 'DM Sans', system-ui, sans-serif;
 }
 
 #root {
   min-height: 100vh;
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+}
+
+:focus-visible {
+  outline: 2px solid rgb(200 147 58 / 60%);
+  outline-offset: 2px;
 }
