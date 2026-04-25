@@ -138,7 +138,7 @@ export default function KinfolkSetup() {
               type="text"
               value={values.kinfolkName}
               onChange={(event) => updateField('kinfolkName', event.target.value)}
-              placeholder="emergency contact"
+              placeholder="their name"
               className="bb-input"
               aria-invalid={fieldErrors.kinfolkName ? 'true' : 'false'}
               required

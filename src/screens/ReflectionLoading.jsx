@@ -74,13 +74,15 @@ export default function ReflectionLoading() {
   }, [currentSession, navigate, setReflection])
 
   useEffect(() => {
+    if (!currentSession) return
+
     unmountedRef.current = false
     runPipeline()
 
     return () => {
       unmountedRef.current = true
     }
-  }, [runPipeline])
+  }, [runPipeline, currentSession])
 
   if (!currentSession) {
     return <Navigate to="/home" replace />

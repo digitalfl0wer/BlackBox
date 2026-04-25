@@ -17,10 +17,19 @@ function readStoredReflection() {
   }
 }
 
+function readStoredSession() {
+  try {
+    return JSON.parse(window.localStorage.getItem('blackbox_current_session') || 'null')
+  } catch {
+    return null
+  }
+}
+
 export default function ReflectionView() {
   const navigate = useNavigate()
-  const { reflection } = useSession()
+  const { reflection, currentSession } = useSession()
   const [resolvedReflection, setResolvedReflection] = useState(reflection)
+  const [resolvedSession, setResolvedSession] = useState(currentSession)
 
   const Guardrail = useMemo(() => getOptionalComponent('Guardrail'), [])
   const ResourceCard = useMemo(() => getOptionalComponent('ResourceCard'), [])
@@ -37,6 +46,18 @@ export default function ReflectionView() {
       setResolvedReflection(stored)
     }
   }, [reflection])
+
+  useEffect(() => {
+    if (currentSession) {
+      setResolvedSession(currentSession)
+      return
+    }
+
+    const stored = readStoredSession()
+    if (stored) {
+      setResolvedSession(stored)
+    }
+  }, [currentSession])
 
   if (!resolvedReflection) {
     return <Navigate to="/home" replace />
@@ -60,6 +81,7 @@ export default function ReflectionView() {
   const supportOptions = Array.isArray(resolvedReflection.supportOptions)
     ? resolvedReflection.supportOptions
     : []
+  const audioSource = resolvedSession?.audioUrl
 
   return (
     <main className="bb-page">
@@ -81,6 +103,20 @@ export default function ReflectionView() {
           <p className="bb-label">AI REFLECTION</p>
           <h1 className="bb-title mt-2 text-2xl sm:text-3xl">Session Reflection</h1>
         </header>
+
+        {audioSource ? (
+          <section className="bb-panel">
+            <h2 className="text-lg font-semibold">Session Audio</h2>
+            <audio
+              className="mt-3 w-full"
+              controls
+              preload="metadata"
+              src={audioSource}
+            >
+              Your browser does not support audio playback.
+            </audio>
+          </section>
+        ) : null}
 
         <section className="bb-panel">
           <h2 className="text-lg font-semibold">1. Plain-Language Summary</h2>

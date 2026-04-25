@@ -38,6 +38,43 @@ function writeStorageValue(key, value) {
   }
 }
 
+function blobToDataUrl(blob) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader()
+    reader.onloadend = () => resolve(typeof reader.result === 'string' ? reader.result : null)
+    reader.onerror = () => reject(new Error('Failed to read audio blob.'))
+    reader.readAsDataURL(blob)
+  })
+}
+
+function dataUrlToBlob(dataUrl) {
+  if (typeof dataUrl !== 'string' || !dataUrl.startsWith('data:')) {
+    return null
+  }
+
+  const splitIndex = dataUrl.indexOf(',')
+  if (splitIndex < 0) {
+    return null
+  }
+
+  const metadata = dataUrl.slice(0, splitIndex)
+  const base64 = dataUrl.slice(splitIndex + 1)
+  const mimeMatch = metadata.match(/^data:([^;]+);base64$/)
+  const mimeType = mimeMatch?.[1] || 'application/octet-stream'
+
+  try {
+    const decoded = window.atob(base64)
+    const bytes = new Uint8Array(decoded.length)
+    for (let index = 0; index < decoded.length; index += 1) {
+      bytes[index] = decoded.charCodeAt(index)
+    }
+
+    return new Blob([bytes], { type: mimeType })
+  } catch (conversionError) {
+    return null
+  }
+}
+
 export function SessionProvider({ children }) {
   const recorder = useRecorder()
 
@@ -50,6 +87,7 @@ export function SessionProvider({ children }) {
   const [currentSession, setCurrentSession] = useState(() =>
     readStorageValue(CURRENT_SESSION_STORAGE_KEY, null)
   )
+  const [currentAudioBlob, setCurrentAudioBlob] = useState(null)
   const [reflection, setReflectionState] = useState(() =>
     readStorageValue(REFLECTION_STORAGE_KEY, null)
   )
@@ -64,6 +102,7 @@ export function SessionProvider({ children }) {
     setSignalSent(false)
     setSignalSentAt(null)
     setIsDiscreet(false)
+    setCurrentAudioBlob(null)
     setReflectionState(null)
 
     const didStart = await recorder.startRecording()
@@ -82,15 +121,15 @@ export function SessionProvider({ children }) {
   const endSession = useCallback(async () => {
     const endedAt = new Date().toISOString()
     const audioBlob = await recorder.stopRecording()
+    const audioUrl = audioBlob ? await blobToDataUrl(audioBlob) : null
 
     setIsRecording(false)
     setIsDiscreet(false)
+    setCurrentAudioBlob(audioBlob || null)
 
     const durationSeconds = startedAt
       ? Math.max(0, Math.round((Date.parse(endedAt) - Date.parse(startedAt)) / 1000))
       : recorder.elapsedSeconds
-
-    const audioUrl = audioBlob ? URL.createObjectURL(audioBlob) : null
 
     const sessionSnapshot = {
       sessionId,
@@ -101,6 +140,7 @@ export function SessionProvider({ children }) {
       signalSentAt,
       audioUrl,
       audioMimeType: audioBlob?.type || null,
+      audioSizeBytes: audioBlob?.size || null,
     }
 
     setCurrentSession(sessionSnapshot)
@@ -114,6 +154,14 @@ export function SessionProvider({ children }) {
     signalSent,
     signalSentAt,
   ])
+
+  const getCurrentSessionAudioBlob = useCallback(() => {
+    if (currentAudioBlob) {
+      return currentAudioBlob
+    }
+
+    return dataUrlToBlob(currentSession?.audioUrl || null)
+  }, [currentAudioBlob, currentSession])
 
   const enterDiscreet = useCallback(() => {
     setIsDiscreet(true)
@@ -156,6 +204,7 @@ export function SessionProvider({ children }) {
     setStartedAt(null)
     setSignalSent(false)
     setSignalSentAt(null)
+    setCurrentAudioBlob(null)
     setCurrentSession(null)
     writeStorageValue(CURRENT_SESSION_STORAGE_KEY, null)
   }, [])
@@ -170,6 +219,7 @@ export function SessionProvider({ children }) {
       signalSent,
       signalSentAt,
       currentSession,
+      currentAudioBlob,
       reflection,
       recordingState: recorder.recordingState,
       elapsedSeconds: recorder.elapsedSeconds,
@@ -182,6 +232,7 @@ export function SessionProvider({ children }) {
       saveSession,
       setReflection,
       resetSession,
+      getCurrentSessionAudioBlob,
     }),
     [
       isRecording,
@@ -191,6 +242,7 @@ export function SessionProvider({ children }) {
       signalSent,
       signalSentAt,
       currentSession,
+      currentAudioBlob,
       reflection,
       recorder,
       startSession,
@@ -201,6 +253,7 @@ export function SessionProvider({ children }) {
       saveSession,
       setReflection,
       resetSession,
+      getCurrentSessionAudioBlob,
     ]
   )
 

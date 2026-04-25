@@ -1,0 +1,24 @@
+{
+  "name": "blackbox-audio-mcp-server",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Local MCP server for audio transcription and transcript retrieval",
+  "main": "index.js",
+  "bin": {
+    "blackbox-audio-mcp": "./index.js"
+  },
+  "scripts": {
+    "start": "node index.js",
+    "dev": "node --watch index.js"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.12.0",
+    "express": "^4.21.2",
+    "openai": "^4.104.0",
+    "zod": "^3.24.2"
+  }
+}

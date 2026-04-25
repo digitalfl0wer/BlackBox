@@ -51,6 +51,7 @@ export default function EndSession() {
   const { currentSession, saveSession } = useSession()
 
   const TagPicker = useMemo(() => getOptionalComponent('TagPicker'), [])
+  const Guardrail = useMemo(() => getOptionalComponent('Guardrail'), [])
 
   const [title, setTitle] = useState('')
   const [notes, setNotes] = useState('')
@@ -178,6 +179,8 @@ export default function EndSession() {
               className="bb-textarea min-h-32"
             />
           </label>
+
+          {Guardrail ? <Guardrail /> : null}
 
           {error ? <p className="text-sm text-memory-violet">{error}</p> : null}
 
