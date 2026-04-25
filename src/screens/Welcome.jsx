@@ -1,50 +1,72 @@
 import { useNavigate } from 'react-router-dom'
+import logoCube from '../../images/logocube.png'
 
 export default function Welcome() {
   const navigate = useNavigate()
 
-  function handleBack() {
-    if (window.history.length > 1) {
-      navigate(-1)
-      return
-    }
-
-    navigate('/', { replace: true })
-  }
-
   return (
-    <main className="flex min-h-screen items-center justify-center bg-void-black px-5 py-8 text-silver-white">
-      <section className="w-full max-w-xl rounded-2xl border border-neutral-gray/30 bg-slate-black p-6 shadow-xl shadow-void-black/50 sm:p-8">
-        <button
-          type="button"
-          onClick={handleBack}
-          className="h-8 -translate-y-3 self-start rounded-md border border-neutral-gray/40 bg-void-black px-2 py-0.5 text-[10px] font-medium text-silver-white"
-        >
-          Back
-        </button>
-        <p className="text-xs uppercase tracking-[0.2em] text-neutral-gray">Black Box</p>
-        <h1 className="mt-2 text-4xl font-semibold leading-tight text-silver-white sm:text-5xl">
-          Preserve the truth.
-        </h1>
-        <p className="mt-1 text-xl text-memory-violet sm:text-2xl">Understand the pattern. Reach support.</p>
+    <main className="bb-page flex items-center">
+      <section className="bb-shell max-w-6xl space-y-5">
+        <div className="bb-panel overflow-hidden">
+          <div className="grid items-center gap-8 lg:grid-cols-[1.1fr_0.9fr]">
+            <div>
+              <p className="bb-label">UNITY. MEMORY. SAFETY. PRESERVED.</p>
+              <h1 className="bb-title mt-3 max-w-xl">
+                Black Box is a private system for preserving truth under pressure.
+              </h1>
+              <p className="bb-subtitle mt-4 max-w-2xl">
+                Capture your experience in real time, reflect with context-aware AI, and keep your record
+                grounded, organized, and ready when you need support.
+              </p>
+              <div className="mt-6 flex flex-wrap gap-3">
+                <button
+                  type="button"
+                  onClick={() => navigate('/setup')}
+                  className="bb-btn-primary min-w-[11rem]"
+                >
+                  Enter Black Box
+                </button>
+                <button
+                  type="button"
+                  onClick={() => navigate('/home')}
+                  className="bb-btn-secondary min-w-[11rem]"
+                >
+                  Open Workspace
+                </button>
+              </div>
+              <p className="mt-5 text-sm leading-6 text-neutral-gray">
+                This app is for personal safety documentation and education. It does not provide legal advice.
+              </p>
+            </div>
 
-        <p className="mt-6 text-sm leading-6 text-silver-white/90 sm:text-base">
-          Black Box helps you document what happened in your own words, then organizes your notes into
-          a plain-language AI Reflection. It is built to help you keep your record clear and connect to
-          support options without adding pressure.
-        </p>
+            <div className="relative mx-auto h-64 w-64 sm:h-72 sm:w-72">
+              <div className="absolute inset-0 rounded-[2rem] bg-memory-violet/12 blur-2xl" />
+              <div className="absolute inset-6 rounded-[1.8rem] bg-unity-amber/14 blur-2xl" />
+              <div className="bb-logo-wrap bb-logo-float absolute inset-0">
+                <img
+                  src={logoCube}
+                  alt="Black Box Unity Cube logo"
+                  className="bb-logo-spin h-full w-full object-contain"
+                />
+                <div className="logo-glow" />
+              </div>
+            </div>
+          </div>
+        </div>
 
-        <p className="mt-5 rounded-lg border border-neutral-gray/40 bg-void-black/40 p-4 text-sm leading-6 text-neutral-gray">
-          This app is for personal safety documentation and education. It does not provide legal advice.
-        </p>
-
-        <button
-          type="button"
-          onClick={() => navigate('/setup')}
-          className="mt-6 inline-flex min-h-12 w-full items-center justify-center rounded-lg bg-unity-amber px-4 py-3 text-sm font-semibold text-void-black transition hover:brightness-95 focus:outline-none focus:ring-2 focus:ring-unity-amber/60"
-        >
-          Get Started
-        </button>
+        <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+          {[
+            ['Unity', 'Keep your account of events coherent and intact.'],
+            ['Memory', 'Organize details into a clear timeline with context.'],
+            ['Safety', 'Enable discreet operation and rapid trusted signals.'],
+            ['Preserved Truth', 'Store records privately for later review and action.'],
+          ].map(([title, description]) => (
+            <article key={title} className="bb-panel-soft rounded-card">
+              <p className="text-sm font-semibold text-silver-white">{title}</p>
+              <p className="mt-2 text-sm leading-6 text-neutral-gray">{description}</p>
+            </article>
+          ))}
+        </div>
       </section>
     </main>
   )

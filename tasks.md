@@ -341,12 +341,12 @@ File: `src/screens/Timeline.jsx`
 ### T-30 · Recording Awareness Overlay
 File: `src/components/RecordingAwarenessOverlay.jsx`
 
-- [ ] Renders as absolute-positioned overlay over ActiveSession
-- [ ] Appears after 1 second delay (not blocking recording)
-- [ ] "I Understand" button disabled for first 5 seconds, then enabled
-- [ ] Dismiss sets local `dismissed` state — overlay disappears
-- [ ] Recording indicator still visible underneath
-- [ ] Copy renders at minimum 14px, not styled as fine print
+- [x] Renders as absolute-positioned overlay over ActiveSession
+- [x] Appears after 1 second delay (not blocking recording)
+- [x] "I Understand" button disabled for first 5 seconds, then enabled
+- [x] Dismiss sets local `dismissed` state — overlay disappears
+- [x] Recording indicator still visible underneath
+- [x] Copy renders at minimum 14px, not styled as fine print
 
 **Done when:** Overlay appears after 1s, cannot be dismissed immediately, recording continues underneath.
 
@@ -371,13 +371,13 @@ File: `src/screens/Discreet.jsx`
 ### T-32 · Send Signal component
 File: `src/components/SignalButton.jsx`
 
-- [ ] On tap: pull Kinfolk + session data from context
-- [ ] Generate alert message:
+- [x] On tap: pull Kinfolk + session data from context
+- [x] Generate alert message:
   > "[Name] may need you. They started a Black Box Session at [time]. Please check on them. Last known location: [location or 'not shared']."
-- [ ] Show full-screen preview modal with the generated message
-- [ ] Confirm button → sets `signalSent: true` in context, shows success toast, closes modal
-- [ ] Cancel button → closes modal, no state change
-- [ ] Message preview uses actual Kinfolk name and real timestamp
+- [x] Show full-screen preview modal with the generated message
+- [x] Confirm button → sets `signalSent: true` in context, shows success toast, closes modal
+- [x] Cancel button → closes modal, no state change
+- [x] Message preview uses actual Kinfolk name and real timestamp
 
 **Done when:** Message preview renders with correct data, confirmation updates signal status.
 
@@ -386,13 +386,13 @@ File: `src/components/SignalButton.jsx`
 ### T-33 · TagPicker component
 File: `src/components/TagPicker.jsx`
 
-- [ ] Renders all 10 scenario tags as chip buttons:
+- [x] Renders all 10 scenario tags as chip buttons:
   Police Encounter, Workplace Concern, Relationship Safety, Boundary / Consent Concern, Public Harassment, Stalking / Unwanted Contact, Digital Safety, Exploitation / Restricted Movement, Medical Concern, Other
-- [ ] Multi-select: tapping toggles selected state
-- [ ] Selected chips: filled amber background
-- [ ] Unselected chips: outlined, muted
-- [ ] Calls `onChange(selectedTags)` on each toggle
-- [ ] Tags wrap correctly on 390px viewport
+- [x] Multi-select: tapping toggles selected state
+- [x] Selected chips: filled amber background
+- [x] Unselected chips: outlined, muted
+- [x] Calls `onChange(selectedTags)` on each toggle
+- [x] Tags wrap correctly on 390px viewport
 
 **Done when:** Tags toggle, selected state is correct, values passed to parent correctly.
 
@@ -401,12 +401,12 @@ File: `src/components/TagPicker.jsx`
 ### T-34 · Guardrail component
 File: `src/components/Guardrail.jsx`
 
-- [ ] Accepts `variant` prop: `'default'` | `'legal'` | `'reflection'`
-- [ ] `default` — general AI disclaimer
-- [ ] `legal` — recording laws copy
-- [ ] `reflection` — full 4-line reflection guardrail (see PRD §11)
-- [ ] Minimum 14px font — never fine print
-- [ ] Left border accent in muted amber
+- [x] Accepts `variant` prop: `'default'` | `'legal'` | `'reflection'`
+- [x] `default` — general AI disclaimer
+- [x] `legal` — recording laws copy
+- [x] `reflection` — full 4-line reflection guardrail (see PRD §11)
+- [x] Minimum 14px font — never fine print
+- [x] Left border accent in muted amber
 - [ ] Renders in `EndSession` and `ReflectionView`
 
 **Done when:** All three variants render correctly in their respective screens.
@@ -416,11 +416,11 @@ File: `src/components/Guardrail.jsx`
 ### T-35 · AffirmingMessage component
 File: `src/components/AffirmingMessage.jsx`
 
-- [ ] Accepts `message` prop (string from reflection)
-- [ ] Warm background card — slightly off-black or amber-tinted surface
-- [ ] Slightly larger text than body (18px)
-- [ ] No icon, no emoji — warmth through typography and spacing only
-- [ ] Renders at bottom of ReflectionView, visually distinct from surrounding sections
+- [x] Accepts `message` prop (string from reflection)
+- [x] Warm background card — slightly off-black or amber-tinted surface
+- [x] Slightly larger text than body (18px)
+- [x] No icon, no emoji — warmth through typography and spacing only
+- [x] Renders at bottom of ReflectionView, visually distinct from surrounding sections
 
 **Done when:** Message renders prominently with correct styling at end of ReflectionView.
 
@@ -429,12 +429,12 @@ File: `src/components/AffirmingMessage.jsx`
 ### T-36 · ResourceCard component
 File: `src/components/ResourceCard.jsx`
 
-- [ ] Props: `{ name, category, description, url }`
-- [ ] Category badge — color-coded chip
-- [ ] Org name — bold, prominent
-- [ ] 1-sentence description in body text
-- [ ] "Visit Resource" button — opens `url` in new tab
-- [ ] Renders 3+ cards correctly in ReflectionView
+- [x] Props: `{ name, category, description, url }`
+- [x] Category badge — color-coded chip
+- [x] Org name — bold, prominent
+- [x] 1-sentence description in body text
+- [x] "Visit Resource" button — opens `url` in new tab
+- [x] Renders 3+ cards correctly in ReflectionView
 
 **Done when:** Cards render with real resource data from the pipeline.
 

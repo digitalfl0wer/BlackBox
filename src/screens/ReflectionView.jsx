@@ -62,31 +62,31 @@ export default function ReflectionView() {
     : []
 
   return (
-    <main className="min-h-screen bg-void-black px-4 py-8 text-silver-white sm:px-6">
-      <section className="mx-auto w-full max-w-4xl space-y-4">
-        <header className="rounded-2xl border border-neutral-gray/30 bg-slate-black p-5 sm:p-7">
+    <main className="bb-page">
+      <section className="bb-shell max-w-4xl space-y-4">
+        <header className="bb-panel">
           <button
             type="button"
             onClick={handleBack}
-            className="h-8 -translate-y-3 self-start rounded-md border border-neutral-gray/40 bg-void-black px-2 py-0.5 text-[10px] font-medium text-silver-white"
+            className="bb-back mb-4"
           >
             Back
           </button>
-          <p className="text-xs uppercase tracking-[0.2em] text-neutral-gray">AI Reflection</p>
-          <h1 className="mt-2 text-2xl font-semibold sm:text-3xl">Session Reflection</h1>
+          <p className="bb-label">AI REFLECTION</p>
+          <h1 className="bb-title mt-2 text-2xl sm:text-3xl">Session Reflection</h1>
         </header>
 
-        <section className="rounded-2xl border border-neutral-gray/30 bg-slate-black p-5 sm:p-7">
+        <section className="bb-panel">
           <h2 className="text-lg font-semibold">1. Plain-Language Summary</h2>
           <p className="mt-3 leading-7 text-silver-white/90">{resolvedReflection.summary || 'No summary available.'}</p>
         </section>
 
-        <section className="rounded-2xl border border-neutral-gray/30 bg-slate-black p-5 sm:p-7">
+        <section className="bb-panel">
           <h2 className="text-lg font-semibold">2. Timeline</h2>
           {timeline.length > 0 ? (
             <ol className="mt-3 space-y-3 text-sm text-silver-white/90">
               {timeline.map((item, index) => (
-                <li key={`${item.time || index}-${item.event || index}`} className="rounded-lg border border-neutral-gray/30 bg-void-black/50 p-3">
+                <li key={`${item.time || index}-${item.event || index}`} className="rounded-control border border-divider-gray/80 bg-void-black/50 p-3">
                   <p className="text-xs uppercase tracking-wide text-neutral-gray">{item.time || `Step ${index + 1}`}</p>
                   <p className="mt-1">{item.event || 'No event text provided.'}</p>
                 </li>
@@ -97,15 +97,12 @@ export default function ReflectionView() {
           )}
         </section>
 
-        <section className="rounded-2xl border border-neutral-gray/30 bg-slate-black p-5 sm:p-7">
+        <section className="bb-panel">
           <h2 className="text-lg font-semibold">3. Possible Concern Areas</h2>
           {concernAreas.length > 0 ? (
             <div className="mt-3 flex flex-wrap gap-2">
               {concernAreas.map((area) => (
-                <span
-                  key={area}
-                  className="rounded-full border border-memory-violet/40 bg-memory-violet/15 px-3 py-1 text-sm text-silver-white"
-                >
+                <span key={area} className="bb-chip text-sm">
                   {area}
                 </span>
               ))}
@@ -115,12 +112,12 @@ export default function ReflectionView() {
           )}
         </section>
 
-        <section className="rounded-2xl border border-neutral-gray/30 bg-slate-black p-5 sm:p-7">
+        <section className="bb-panel">
           <h2 className="text-lg font-semibold">4. Why These Were Flagged</h2>
           {whyFlagged.length > 0 ? (
             <div className="mt-3 space-y-3">
               {whyFlagged.map((item, index) => (
-                <article key={`${item.area || index}-${index}`} className="rounded-lg border border-neutral-gray/30 bg-void-black/50 p-4">
+                <article key={`${item.area || index}-${index}`} className="rounded-control border border-divider-gray/80 bg-void-black/50 p-4">
                   <p className="text-sm font-semibold text-silver-white">{item.area || 'Possible concern area'}</p>
                   <p className="mt-1 text-sm text-silver-white/90">{item.reason || 'No reason provided.'}</p>
                   {Array.isArray(item.phrases) && item.phrases.length > 0 ? (
@@ -138,7 +135,7 @@ export default function ReflectionView() {
           )}
         </section>
 
-        <section className="rounded-2xl border border-neutral-gray/30 bg-slate-black p-5 sm:p-7">
+        <section className="bb-panel">
           <h2 className="text-lg font-semibold">5. What This Does Not Mean</h2>
           <div className="mt-3">
             {Guardrail ? (
@@ -152,7 +149,7 @@ export default function ReflectionView() {
           </div>
         </section>
 
-        <section className="rounded-2xl border border-neutral-gray/30 bg-slate-black p-5 sm:p-7">
+        <section className="bb-panel">
           <h2 className="text-lg font-semibold">6. Suggested Next Steps</h2>
           {nextSteps.length > 0 ? (
             <ul className="mt-3 list-disc space-y-2 pl-5 text-sm text-silver-white/90">
@@ -165,7 +162,7 @@ export default function ReflectionView() {
           )}
         </section>
 
-        <section className="rounded-2xl border border-neutral-gray/30 bg-slate-black p-5 sm:p-7">
+        <section className="bb-panel">
           <h2 className="text-lg font-semibold">7. Support Options</h2>
           {supportOptions.length > 0 ? (
             <div className="mt-3 grid grid-cols-1 gap-3">
@@ -198,7 +195,7 @@ export default function ReflectionView() {
           )}
         </section>
 
-        <section className="rounded-2xl border border-memory-violet/40 bg-memory-violet/10 p-5 sm:p-7">
+        <section className="bb-panel border-memory-violet/40 bg-memory-violet/10">
           <h2 className="text-lg font-semibold">8. Affirming Message</h2>
           <div className="mt-3">
             {AffirmingMessage ? (

@@ -101,18 +101,19 @@ export default function EndSession() {
   }
 
   return (
-    <main className="min-h-screen bg-void-black px-4 py-8 text-silver-white sm:px-6">
-      <section className="mx-auto w-full max-w-3xl rounded-2xl border border-neutral-gray/30 bg-slate-black p-5 sm:p-7">
+    <main className="bb-page">
+      <section className="bb-shell bb-panel max-w-3xl">
         <button
           type="button"
           onClick={handleBack}
-          className="h-8 -translate-y-3 self-start rounded-md border border-neutral-gray/40 bg-void-black px-2 py-0.5 text-[10px] font-medium text-silver-white"
+          className="bb-back mb-4"
         >
           Back
         </button>
-        <h1 className="text-2xl font-semibold sm:text-3xl">End Session</h1>
+        <p className="bb-label">SESSION WRAP-UP</p>
+        <h1 className="bb-title mt-2 text-2xl sm:text-3xl">End Session</h1>
 
-        <div className="mt-4 grid grid-cols-1 gap-3 rounded-lg border border-neutral-gray/30 bg-void-black/40 p-4 text-sm text-neutral-gray sm:grid-cols-3">
+        <div className="mt-4 grid grid-cols-1 gap-3 rounded-control border border-divider-gray/80 bg-void-black/45 p-4 text-sm text-mist-gray sm:grid-cols-3">
           <p>
             <span className="block text-xs uppercase tracking-wide text-neutral-gray">Start Time</span>
             <span className="text-silver-white">{formatDateTime(currentSession.startedAt)}</span>
@@ -134,7 +135,7 @@ export default function EndSession() {
               type="text"
               value={title}
               onChange={(event) => setTitle(event.target.value)}
-              className="min-h-12 w-full rounded-lg border border-neutral-gray/40 bg-void-black px-3 text-silver-white outline-none focus:border-unity-amber"
+              className="bb-input"
               required
             />
           </label>
@@ -153,7 +154,7 @@ export default function EndSession() {
                 {SCENARIO_TAGS.map((tag) => (
                   <label
                     key={tag}
-                    className="flex min-h-12 items-center gap-2 rounded-lg border border-neutral-gray/30 bg-void-black/50 px-3 text-sm text-silver-white"
+                    className="flex min-h-touch items-center gap-2 rounded-control border border-divider-gray bg-void-black/50 px-3 text-sm text-silver-white"
                   >
                     <input
                       type="checkbox"
@@ -174,7 +175,7 @@ export default function EndSession() {
               value={notes}
               onChange={(event) => setNotes(event.target.value)}
               placeholder="Write details you want to remember from this session."
-              className="min-h-32 w-full rounded-lg border border-neutral-gray/40 bg-void-black px-3 py-2 text-silver-white outline-none focus:border-unity-amber"
+              className="bb-textarea min-h-32"
             />
           </label>
 
@@ -182,7 +183,7 @@ export default function EndSession() {
 
           <button
             type="submit"
-            className="min-h-12 w-full rounded-lg bg-unity-amber px-4 py-3 text-sm font-semibold text-void-black"
+            className="bb-btn-primary w-full"
           >
             Save &amp; Generate Reflection
           </button>
