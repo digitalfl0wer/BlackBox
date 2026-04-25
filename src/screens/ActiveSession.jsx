@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { Navigate, useNavigate } from 'react-router-dom'
 import { useSession } from '../context/SessionContext'
 
 const COMPONENT_MODULES = import.meta.glob('../components/*.jsx', { eager: true })
@@ -89,6 +89,31 @@ export default function ActiveSession() {
   }
 
   const kinfolk = useMemo(() => readKinfolk(), [])
+  const hasKinfolkProfile = Boolean(
+    kinfolk?.yourName &&
+      kinfolk?.yourState &&
+      kinfolk?.kinfolkName &&
+      kinfolk?.kinfolkContact &&
+      kinfolk?.consent
+  )
+
+  const recorderErrorMessage =
+    recorderError === 'Microphone permission denied or unavailable.'
+      ? 'Microphone access is blocked. Enable microphone permission for this site in your browser settings, then return and try again.'
+      : recorderError
+
+  if (!hasKinfolkProfile) {
+    return (
+      <Navigate
+        to="/setup"
+        replace
+        state={{
+          notice:
+            'Set up your Kinfolk profile before starting a Black Box Session so Signal can route correctly.',
+        }}
+      />
+    )
+  }
 
   return (
     <main className="bb-page relative">
@@ -113,9 +138,9 @@ export default function ActiveSession() {
           </span>
         </div>
 
-        {recorderError ? (
+        {recorderErrorMessage ? (
           <p className="mt-3 rounded-control border border-memory-violet/45 bg-memory-violet/10 p-3 text-sm text-silver-white">
-            {recorderError}
+            {recorderErrorMessage}
           </p>
         ) : null}
 
